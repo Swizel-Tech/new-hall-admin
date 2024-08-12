@@ -15,6 +15,7 @@ export const TopNav = ({ title }: TopNavProps) => {
   const [staffName, setStaffName] = useState("");
   const tooltipRef = useRef<HTMLElement>(null);
   const [profileClicked, setprofileClicked] = useState(false);
+
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
       if (
@@ -41,6 +42,7 @@ export const TopNav = ({ title }: TopNavProps) => {
       document.removeEventListener("keydown", handleEscKey);
     };
   }, [profileClicked]);
+
   useEffect(() => {
     setStaffName(`${user.staffRec.lastName}`);
   }, []);
