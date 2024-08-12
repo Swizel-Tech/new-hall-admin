@@ -1,0 +1,89 @@
+@import url("https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,100..1000;1,9..40,100..1000&family=Plus+Jakarta+Sans&display=swap");
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    --admin-color-light: 217 225 225;
+    --admin-color-dark: 22 21 28;
+    --admin-color-theme: var(--admin-color-light);
+  }
+
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --admin-color-theme: var(--admin-color-dark);
+      --admin-color-text: var(--admin-color-light);
+    }
+  }
+
+  @media (prefers-color-scheme: light) {
+    :root {
+      --admin-color-theme: var(--admin-color-light);
+      --admin-color-text: var(--admin-color-dark);
+    }
+  }
+}
+
+.content {
+  filter: blur(10%);
+}
+
+.admin-theme-dark {
+  --admin-color-theme: var(--admin-color-dark);
+  --admin-color-text: var(--admin-color-light);
+}
+
+.admin-theme-light {
+  --admin-color-theme: var(--admin-color-light);
+  --admin-color-text: var(--admin-color-dark);
+}
+
+* {
+  background-color: #f6f6f6;
+}
+
+/* Custom scrollbar styles */
+::-webkit-scrollbar {
+  width: 10px; /* width of the entire scrollbar */
+}
+
+::-webkit-scrollbar-track {
+  background: #f1f1f1; /* color of the track */
+}
+
+::-webkit-scrollbar-thumb {
+  background-color: #888; /* color of the scrollbar thumb */
+  border-radius: 10px; /* roundness of the scroll thumb */
+  border: 3px solid #f1f1f1; /* creates padding around thumb */
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #555; /* color of the thumb when hovered */
+}
+
+@keyframes rotate {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.loading-animation {
+  animation: rotate 2s linear infinite;
+}
+
+.loading-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 999;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
