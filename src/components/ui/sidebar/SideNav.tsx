@@ -22,7 +22,7 @@ export const SideNav = (props: SideNavProps) => {
 
   const style = ({ isActive }: ActiveClass) => {
     const baseStyles = cn(
-      "relative flex bg-[#323232] w-full flex-row items-center gap-4 p-3",
+      "relative flex bg-[#323232] w-full flex-row rounded-[8px] items-center gap-4 p-3",
       isActive && "rounded-[8px] w-full bg-[#3B5712]"
     );
 

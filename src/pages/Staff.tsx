@@ -321,7 +321,7 @@ const Staff = () => {
                     </motion.div>
                   )}
                 </div>
-                <div className="flex flex-col items-left bg-[#fff] justify-center pt-2 lg:w-[336px]">
+                <div className="flex flex-col items-left bg-[#fff] justify-center pt-2 lg:w-[336px]  w-full ">
                   <p className="bg-inherit text-[13px] text-[#80BD25] mb-1 font-semibold">
                     ID No.
                   </p>
@@ -337,7 +337,7 @@ const Staff = () => {
                     />
                   </div>
                 </div>
-                <div className="flex flex-col items-left bg-[#fff] justify-center pt-4 lg:w-[336px]">
+                <div className="flex flex-col items-left bg-[#fff] justify-center pt-4 lg:w-[336px]  w-full ">
                   <p className="bg-inherit text-[13px] text-[#80BD25] mb-1 font-semibold">
                     First Name
                   </p>
@@ -353,7 +353,7 @@ const Staff = () => {
                     />
                   </div>
                 </div>
-                <div className="flex flex-col items-left bg-[#fff] justify-center pt-4 lg:w-[336px]">
+                <div className="flex flex-col items-left bg-[#fff] justify-center pt-4 lg:w-[336px]  w-full ">
                   <p className="bg-inherit text-[13px] text-[#80BD25] mb-1 font-semibold">
                     Middle Name
                   </p>
@@ -369,7 +369,7 @@ const Staff = () => {
                     />
                   </div>
                 </div>
-                <div className="flex flex-col items-left bg-[#fff] justify-center pt-4 lg:w-[336px]">
+                <div className="flex flex-col items-left bg-[#fff] justify-center pt-4 lg:w-[336px]  w-full ">
                   <p className="bg-inherit text-[13px] text-[#80BD25] mb-1 font-semibold">
                     Last Name
                   </p>
@@ -385,7 +385,7 @@ const Staff = () => {
                     />
                   </div>
                 </div>
-                <div className="flex flex-col items-left bg-[#fff] justify-center pt-4 lg:w-[336px]">
+                <div className="flex flex-col items-left bg-[#fff] justify-center pt-4 lg:w-[336px]  w-full ">
                   <p className="bg-inherit text-[13px] text-[#80BD25] mb-1 font-semibold">
                     Email Address
                   </p>
@@ -401,7 +401,7 @@ const Staff = () => {
                     />
                   </div>
                 </div>
-                <div className="flex flex-col items-left bg-[#fff] justify-center pt-4 lg:w-[336px]">
+                <div className="flex flex-col items-left bg-[#fff] justify-center pt-4 lg:w-[336px]  w-full ">
                   <p className="bg-inherit text-[13px] text-[#80BD25] mb-1 font-semibold">
                     Phone
                   </p>
@@ -417,7 +417,7 @@ const Staff = () => {
                     />
                   </div>
                 </div>
-                <div className="flex flex-col items-left bg-[#fff] justify-center pt-4 lg:w-[336px]">
+                <div className="flex flex-col items-left bg-[#fff] justify-center pt-4 lg:w-[336px]  w-full ">
                   <p className="bg-inherit text-[13px] text-[#80BD25] mb-1 font-semibold">
                     Department
                   </p>
@@ -433,7 +433,7 @@ const Staff = () => {
                     />
                   </div>
                 </div>
-                <div className="flex flex-col items-left bg-[#fff] justify-center pt-4 lg:w-[336px]">
+                <div className="flex flex-col items-left bg-[#fff] justify-center pt-4 lg:w-[336px]  w-full ">
                   <p className="bg-inherit text-[13px] text-[#80BD25] mb-1 font-semibold">
                     Position
                   </p>
@@ -450,7 +450,7 @@ const Staff = () => {
                   </div>
                 </div>
                 <button
-                  className="bg-[#80BD25] h-[40px] lg:w-[336px] rounded-md font-semibold text-[#fff] my-4"
+                  className="bg-[#80BD25] h-[40px] lg:w-[336px]  w-full  rounded-md font-semibold text-[#fff] my-4"
                   onClick={handleSubmit}
                 >
                   Create

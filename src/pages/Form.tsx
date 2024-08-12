@@ -214,14 +214,16 @@ const Form = () => {
       {loading && (
         <div className="fixed right-0 top-0 z-[999] h-full w-full bg-transparent backdrop-blur-[10px] transition-[.5s]"></div>
       )}
-      <div className="p-8 w-full">
-        <button
-          className="float-end px-4 py-2 text-[#fff] bg-green-900 rounded-lg"
-          onClick={handleLogin}
-        >
-          Login
-        </button>
-        <div className="flex flex-col sm:flex-row w-full justify-between items-end h-[80vh] bg-[#F6F6F6]">
+      <div className="p-2 lg:p-8 w-full">
+        {showforgotPassword && (
+          <button
+            className="float-end px-4 py-2 text-[#fff] bg-green-900 rounded-lg"
+            onClick={handleLogin}
+          >
+            Login
+          </button>
+        )}
+        <div className="flex flex-col lg:flex-row w-full justify-between items-end h-[90vh] bg-[#F6F6F6]">
           <div className="w-full lg:w-[60%] bg-inherit flex justify-center items-center flex-1 h-full">
             <img src={login} alt="" className="w-[72%] rounded-lg" />
           </div>

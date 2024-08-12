@@ -97,8 +97,6 @@ const Calendar = () => {
   const all_event = async () => {
     try {
       const res = await get_all_event();
-      console.log(res);
-
       const findUserArray = res.data;
       const totalCount = res.totalCount;
       if (Array.isArray(findUserArray)) {
@@ -263,7 +261,7 @@ const Calendar = () => {
                 <h2 className="font-bold text-center w-full bg-white text-[20px] font-DMSans mt-4">
                   New Event
                 </h2>
-                <div className="flex flex-col items-left bg-[#fff] justify-center pt-2 lg:w-[336px]">
+                <div className="flex flex-col items-left bg-[#fff] justify-center pt-2 w-full lg:w-[336px]">
                   <p className="bg-inherit text-[13px] text-[#80BD25] mb-1 font-semibold">
                     Event Title
                   </p>
@@ -279,7 +277,7 @@ const Calendar = () => {
                     />
                   </div>
                 </div>
-                <div className="flex flex-col items-left bg-[#fff] justify-center pt-4 lg:w-[336px]">
+                <div className="flex flex-col items-left bg-[#fff] justify-center pt-4  w-full  lg:w-[336px]">
                   <p className="bg-inherit text-[13px] text-[#80BD25] mb-1 font-semibold">
                     Event Date
                   </p>
@@ -295,7 +293,7 @@ const Calendar = () => {
                     />
                   </div>
                 </div>
-                <div className="flex flex-col items-left bg-[#fff] justify-center pt-4 lg:w-[336px]">
+                <div className="flex flex-col items-left bg-[#fff] justify-center pt-4  w-full  lg:w-[336px]">
                   <p className="bg-inherit text-[13px] text-[#80BD25] mb-1 font-semibold">
                     Start Date
                   </p>
@@ -311,7 +309,7 @@ const Calendar = () => {
                     />
                   </div>
                 </div>
-                <div className="flex flex-col items-left bg-[#fff] justify-center pt-4 lg:w-[336px]">
+                <div className="flex flex-col items-left bg-[#fff] justify-center pt-4  w-full  lg:w-[336px]">
                   <p className="bg-inherit text-[13px] text-[#80BD25] mb-1 font-semibold">
                     Start Time
                   </p>
@@ -327,7 +325,7 @@ const Calendar = () => {
                     />
                   </div>
                 </div>
-                <div className="flex flex-col items-left bg-[#fff] justify-center pt-4 lg:w-[336px]">
+                <div className="flex flex-col items-left bg-[#fff] justify-center pt-4  w-full  lg:w-[336px]">
                   <p className="bg-inherit text-[13px] text-[#80BD25] mb-1 font-semibold">
                     End Date
                   </p>
@@ -343,7 +341,7 @@ const Calendar = () => {
                     />
                   </div>
                 </div>
-                <div className="flex flex-col items-left bg-[#fff] justify-center pt-4 lg:w-[336px]">
+                <div className="flex flex-col items-left bg-[#fff] justify-center pt-4  w-full  lg:w-[336px]">
                   <p className="bg-inherit text-[13px] text-[#80BD25] mb-1 font-semibold">
                     End Time
                   </p>
@@ -359,7 +357,7 @@ const Calendar = () => {
                     />
                   </div>
                 </div>
-                <div className="flex flex-col items-left bg-[#fff] justify-center pt-4 lg:w-[336px]">
+                <div className="flex flex-col items-left bg-[#fff] justify-center pt-4  w-full  lg:w-[336px]">
                   <p className="bg-inherit text-[13px] text-[#80BD25] mb-1 font-semibold">
                     Location
                   </p>
@@ -375,7 +373,7 @@ const Calendar = () => {
                     />
                   </div>
                 </div>
-                <div className="flex flex-col items-left bg-[#fff] justify-center pt-4 lg:w-[336px]">
+                <div className="flex flex-col items-left bg-[#fff] justify-center pt-4  w-full  lg:w-[336px]">
                   <p className="bg-inherit text-[13px] text-[#80BD25] mb-1 font-semibold">
                     Event Description
                   </p>
@@ -390,7 +388,7 @@ const Calendar = () => {
                   </div>
                 </div>
                 <button
-                  className="bg-[#80BD25] h-[40px] lg:w-[336px] rounded-md font-semibold text-[#fff] my-4"
+                  className="bg-[#80BD25] h-[40px] lg:w-[336px] rounded-md font-semibold  w-full  text-[#fff] my-4"
                   onClick={handleSubmit}
                 >
                   Create
