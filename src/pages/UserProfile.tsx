@@ -77,19 +77,19 @@ const UserProfile = () => {
         </button>
       </div>
       <div className="w-full lg:w-[60%] rounded-lg m-auto shadow-xl">
-        <div className="w-full flex bg-white p-4 justify-between items-center">
-          <h2 className="bg-white text-[#000] py-2 rounded-lg text-left px-2 font-bold font-DMSans text-[18px]">
+        <div className="w-full flex bg-white p-4 rounded-lg justify-between items-center">
+          <h2 className="bg-white text-[#000] py-2 text-left px-2 font-bold font-DMSans text-[18px]">
             {formData.firstName} {formData.lastName}
           </h2>
         </div>
         <div className="w-full rounded-lg p-4 bg-white">
           <img
-            src={formData.picture}
+            src={`${import.meta.env.VITE_API_BASE_URL}/${formData.picture}`}
             alt=""
             className="rounded-full w-[150px] h-[150px] m-auto"
           />
         </div>
-        <div className="w-full flex justify-center items-center flex-col bg-white">
+        <div className="w-full flex rounded-lg justify-center items-center flex-col bg-white">
           <div className="w-full lg:w-[90%] flex flex-col lg:flex-row justify-between items-center bg-white px-4 gap-4">
             <div className="flex flex-col items-left bg-[#fff] justify-center lg:w-[50%]  w-full ">
               <p className="bg-inherit text-[13px] text-[#80BD25] mb-1 font-semibold">
@@ -100,6 +100,7 @@ const UserProfile = () => {
                 <input
                   type="text"
                   className="w-full focus:outline-none h-full px-2"
+                  readOnly
                   placeholder="ID Card No"
                   name="idNo"
                   value={formData.idNo}
@@ -117,6 +118,7 @@ const UserProfile = () => {
                   type="text"
                   className="w-full  focus:outline-none h-full px-2"
                   placeholder="First name"
+                  readOnly
                   name="firstName"
                   value={formData.firstName}
                   onChange={handleInputChange}
@@ -135,6 +137,7 @@ const UserProfile = () => {
                   type="text"
                   className="w-full  focus:outline-none h-full px-2"
                   placeholder="Middle name"
+                  readOnly
                   name="middleName"
                   value={formData.middleName}
                   onChange={handleInputChange}
@@ -151,6 +154,7 @@ const UserProfile = () => {
                   type="text"
                   className="w-full  focus:outline-none h-full px-2"
                   placeholder="Last name"
+                  readOnly
                   name="lastName"
                   value={formData.lastName}
                   onChange={handleInputChange}
@@ -169,6 +173,7 @@ const UserProfile = () => {
                   type="email"
                   className="w-full focus:outline-none h-full px-2"
                   placeholder="Email Address"
+                  readOnly
                   name="email"
                   value={formData.email}
                   onChange={handleInputChange}
@@ -185,6 +190,7 @@ const UserProfile = () => {
                   type="number"
                   className="w-full focus:outline-none h-full px-2"
                   placeholder="Phone"
+                  readOnly
                   name="phone"
                   value={formData.phone}
                   onChange={handleInputChange}
@@ -192,7 +198,7 @@ const UserProfile = () => {
               </div>
             </div>
           </div>
-          <div className="w-full lg:w-[90%] flex flex-col lg:flex-row justify-between items-center bg-white px-4 gap-4">
+          <div className="w-full lg:w-[90%]  pb-6 flex flex-col lg:flex-row justify-between items-center bg-white px-4 gap-4">
             <div className="flex flex-col items-left bg-[#fff] justify-center pt-4 lg:w-[50%]  w-full ">
               <p className="bg-inherit text-[13px] text-[#80BD25] mb-1 font-semibold">
                 Department
@@ -203,6 +209,7 @@ const UserProfile = () => {
                   type="text"
                   className="w-full focus:outline-none h-full px-2"
                   placeholder="Department"
+                  readOnly
                   name="department"
                   value={formData.department}
                   onChange={handleInputChange}
@@ -220,20 +227,21 @@ const UserProfile = () => {
                   name="position"
                   className="w-full focus:outline-none h-full px-2"
                   placeholder="Position"
+                  readOnly
                   value={formData.position}
                   onChange={handleInputChange}
                 />
               </div>
             </div>
           </div>
-          <div className="w-full lg:w-[90%] flex flex-col lg:flex-row justify-between items-center bg-white px-4 gap-4">
+          {/* <div className="w-full lg:w-[90%] flex flex-col lg:flex-row justify-between items-center bg-white px-4 gap-4">
             <button
               className="bg-[#80BD25] h-[40px]  w-full  rounded-md font-semibold text-[#fff] my-4"
               // onClick={handleSubmit}
             >
               Update
             </button>
-          </div>
+          </div> */}
         </div>
       </div>
     </DashboardArea>

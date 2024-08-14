@@ -26,8 +26,7 @@ export const Avatar = (props: AvatarProps) => {
 
   const imagePath = img?.replace(/\\/g, "/");
 
-  const imageUrl = `https://new-hall-server.onrender.com/${imagePath}`;
-  console.log(imageUrl);
+  const imageUrl = `${import.meta.env.VITE_API_BASE_URL}/${imagePath}`;
 
   const cnFn = (...inputs: ClassArray) =>
     cn(

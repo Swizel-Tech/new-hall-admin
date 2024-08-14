@@ -3,26 +3,18 @@ import { cn } from "../../utils/helpers";
 import { FaChevronLeft, FaChevronRight } from "react-icons/fa";
 import { Avatar } from "../ui/avatar";
 import {
-  ArchiveDocument,
-  Camera,
+  CalendarAdd,
+  CalendarCheck,
+  ClockCircle,
   Edit,
-  Eye,
-  IdCard,
-  Mail,
-  Mobile,
+  //   Eye,
   Trash,
-  UserAdd,
-  UserCircleBlock,
 } from "react-huge-icons/outline";
-// import { delete_staff } from "../../utils/apiService";
-// import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import { Warning } from "../ui/modals/Warning";
-import { useNavigate } from "react-router-dom";
 import { AnimatePresence, motion } from "framer-motion";
-import { get_staff, edit_staff } from "../../utils/apiService";
+import { get_an_event, edit_event } from "../../utils/apiService";
 import { success } from "../../assets";
-// import {  } from "react-huge-icons/outline";
+import { EventDeleteWarn } from "../ui/modals/EventDeleteWarn";
 
 interface IBaseTable {
   showPagination?: boolean;
@@ -31,29 +23,25 @@ interface IBaseTable {
   tableRows: (string | Record<string, string | boolean | undefined>)[][];
 }
 
-export const BaseTable = ({
+export const CalendarTable = ({
   // showPagination = false,
   headers,
   headersClassName,
   tableRows,
 }: IBaseTable) => {
-  const [itemsPerPage] = useState(4);
-  const navigate = useNavigate();
+  const [itemsPerPage] = useState(6);
+  //   const navigate = useNavigate();
   const [currentPage, setCurrentPage] = useState(1);
-  const [staffpicture, setPicture] = useState("");
   const [isEditSuccess, setisEditSuccess] = useState(false);
-  const [selectedFile, setSelectedFile] = useState<File | null>(null);
   const tooltipRef = useRef<HTMLElement>(null);
   const [formData, setFormData] = useState({
-    idNo: "",
-    firstName: "",
-    middleName: "",
-    lastName: "",
-    email: "",
-    phone: "",
-    department: "",
-    position: "",
-    picture: null as File | null,
+    title: "",
+    description: "",
+    location: "",
+    startDate: "",
+    startTime: "",
+    endDate: "",
+    endTime: "",
   });
   const [isEditstaff, setisEditstaff] = useState({
     status: false,
@@ -74,7 +62,7 @@ export const BaseTable = ({
     if (typeof userId === "string") {
       setDeleteWarn({
         status: true,
-        msg: "Are you sure you want to delete this Account?",
+        msg: "Are you sure you want to delete this Event?",
         userId: userId,
       });
     } else {
@@ -98,9 +86,6 @@ export const BaseTable = ({
       msg: "",
       userId: "",
     });
-  };
-  const handleStaffView = (staffId: string | boolean | undefined) => {
-    navigate(`/staff/${staffId}`);
   };
 
   useEffect(() => {
@@ -139,21 +124,24 @@ export const BaseTable = ({
       [name]: value,
     });
   };
-  const handlePictureChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files?.[0];
-    if (file) {
-      setFormData({ ...formData, picture: file });
-      setSelectedFile(() => file);
-    }
-  };
-
   // get Staff
   const getstaff = async () => {
     try {
-      const res = await get_staff(isEditstaff.staffId);
+      const res = await get_an_event(isEditstaff.staffId);
       if (res.success === true) {
-        setFormData(res.data);
-        setPicture(res.data.picture);
+        const startDate = new Date(res.data.startDate)
+          .toISOString()
+          .slice(0, 10);
+        const endDate = new Date(res.data.endDate).toISOString().slice(0, 10);
+        setFormData({
+          title: res.data.title,
+          description: res.data.description,
+          location: res.data.location,
+          startDate: startDate,
+          startTime: res.data.startTime,
+          endDate: endDate,
+          endTime: res.data.endTime,
+        });
       }
     } catch (error) {
       console.log(error);
@@ -166,21 +154,28 @@ export const BaseTable = ({
 
   const handleSubmit = async () => {
     try {
-      const formDataToSend = new FormData();
-      formDataToSend.append("idNo", formData.idNo);
-      formDataToSend.append("firstName", formData.firstName);
-      formDataToSend.append("middleName", formData.middleName);
-      formDataToSend.append("lastName", formData.lastName);
-      formDataToSend.append("email", formData.email);
-      formDataToSend.append("phone", formData.phone);
-      formDataToSend.append("department", formData.department);
-      formDataToSend.append("position", formData.position);
-      if (formData.picture) {
-        formDataToSend.append("file", formData.picture);
-      }
-      const res = await edit_staff(formDataToSend, isEditstaff.staffId);
-      console.log(res);
+      const formatDate = (dateString: string | number | Date) => {
+        const date = new Date(dateString);
+        const day = String(date.getDate()).padStart(2, "0");
+        const month = String(date.getMonth() + 1).padStart(2, "0");
+        const year = date.getFullYear();
+        return `${day}-${month}-${year}`;
+      };
 
+      const startDate = formatDate(formData.startDate);
+      const endDate = formatDate(formData.endDate);
+
+      const event = {
+        title: formData.title,
+        description: formData.description,
+        location: formData.location,
+        startDate: startDate,
+        startTime: formData.startTime,
+        endDate: endDate,
+        endTime: formData.endTime,
+      };
+
+      const res = await edit_event(event, isEditstaff.staffId);
       if (res.success === true) {
         setisEditstaff({
           status: false,
@@ -188,17 +183,6 @@ export const BaseTable = ({
         });
         window.location.reload();
         setisEditSuccess(true);
-        setFormData({
-          idNo: "",
-          firstName: "",
-          middleName: "",
-          lastName: "",
-          email: "",
-          phone: "",
-          department: "",
-          position: "",
-          picture: null as File | null,
-        });
         setTimeout(() => {
           setisEditSuccess(false);
         }, 1000);
@@ -206,11 +190,6 @@ export const BaseTable = ({
     } catch (error) {
       console.log(error);
     }
-    // Handle form submission here
-  };
-
-  const removeFile = () => {
-    setSelectedFile(null);
   };
 
   const fadeInVariants = {
@@ -245,10 +224,10 @@ export const BaseTable = ({
       } else if (row.action === true && row.userId) {
         return (
           <div className="flex bg-white flex-row items-center gap-3">
-            <Eye
+            {/* <Eye
               onClick={() => handleStaffView(row.userId)}
               className="cursor-pointer bg-white text-xl"
-            />
+            /> */}
             <Edit
               onClick={() => hndeleditstaff(row.userId)}
               className="cursor-pointer bg-white text-xl"
@@ -283,7 +262,7 @@ export const BaseTable = ({
   }
 
   return (
-    <div className="w-auto mb-2">
+    <div className="w-auto mb-6">
       <div className="w-auto bg-white overflow-x-auto rounded-[8px]">
         <table className="table bg-white w-full">
           <thead className="bg-white">
@@ -331,7 +310,7 @@ export const BaseTable = ({
       </div>
       <div className="flex bg-white items-center justify-between rounded-[8px]">
         {/* <div className="font-semibold bg-white">Page {currentPage}</div> */}
-        <div className="mt-2 bg-white flex items-center w-full justify-between">
+        <div className="mt-4 bg-white flex items-center w-full justify-between">
           <button
             className="rounded-lg flex justify-center border-[1px] border-[#e6e6e6] bg-[#fcfdfd] items-center gap-2 p-1"
             onClick={() => paginate(currentPage - 1)}
@@ -373,202 +352,140 @@ export const BaseTable = ({
               }
             >
               <div className="flex w-full flex-col items-center bg-[#fff] justify-center">
-                <h2 className="font-bold text-left w-full bg-white text-[20px] font-DMSans mt-4">
-                  Edit Staff
+                <h2 className="font-bold text-center w-full bg-white text-[20px] font-DMSans mt-4">
+                  Edit Event
                 </h2>
-                {staffpicture !== "" ? (
-                  <>
-                    <button
-                      className="mb-3 rounded-lg bg-[#80BD25] p-2 text-center text-[14px] text-[#fff] font-semibold"
-                      onClick={() => setPicture("")}
-                    >
-                      Change Picture
-                    </button>
-                    <img
-                      src={`${
-                        import.meta.env.VITE_API_BASE_URL
-                      }/${staffpicture}`}
-                      alt="Selected"
-                      className="h-[180px] w-[180px] rounded-[10px] border-[1px] border-themeGrey/20"
-                    />
-                  </>
-                ) : (
-                  <div className="bg-white">
-                    {/* <input type="file" name="picture" onChange={handlePictureChange} /> */}
-                    {selectedFile ? (
-                      <div className="bg-white">
-                        <button
-                          className="mb-3 rounded-lg bg-[#80BD25] p-2 text-center text-[14px] text-[#fff] font-semibold"
-                          onClick={removeFile}
-                        >
-                          Change
-                        </button>
-                        <motion.img
-                          initial={{ scale: 0 }}
-                          animate={{ scale: 1 }}
-                          transition={{ duration: 1.5 }}
-                          exit={{ scale: 0 }}
-                          src={URL.createObjectURL(selectedFile)}
-                          alt="Selected"
-                          className=" h-[180px] w-[180px] rounded-[10px] border-[1px] border-themeGrey/20"
-                        />
-                      </div>
-                    ) : (
-                      <motion.div
-                        initial={{ scale: 0 }}
-                        animate={{ scale: 1 }}
-                        transition={{ duration: 1.5 }}
-                        exit={{ scale: 0 }}
-                      >
-                        <label className="inline-block">
-                          <input
-                            type="file"
-                            name="picture"
-                            onChange={handlePictureChange}
-                            className="hidden"
-                            accept="image/*"
-                          />
-                          <div className="inset-0 flex h-[180px] w-[140px] items-center  justify-center rounded-[10px] border-[1px] border-[#80BD25] lg:w-[180px]">
-                            <Camera fontSize={40} />
-                          </div>
-                        </label>
-                      </motion.div>
-                    )}
-                  </div>
-                )}
-                <div className="flex flex-col items-left bg-[#fff] justify-center pt-2 lg:w-[336px]  w-full ">
+                <div className="flex flex-col items-left bg-[#fff] justify-center pt-2 w-full lg:w-[336px]">
                   <p className="bg-inherit text-[13px] text-[#80BD25] mb-1 font-semibold">
-                    ID No.
+                    Event Title
                   </p>
                   <div className="h-[40px] flex justify-between items-center w-full border-[1px] border-[#ddd] bg-slate-400 rounded-md">
-                    <IdCard className="bg-inherit h-[30px] w-[30px] text-[#ddd]" />
+                    <CalendarAdd className="bg-inherit h-[30px] w-[30px] text-[#ddd]" />
                     <input
                       type="text"
                       className="w-full focus:outline-none h-full px-2"
-                      placeholder="ID Card No"
-                      name="idNo"
-                      value={formData.idNo}
+                      placeholder="Event Title"
+                      name="title"
+                      value={formData.title}
                       onChange={handleInputChange}
                     />
                   </div>
                 </div>
-                <div className="flex flex-col items-left bg-[#fff] justify-center pt-4 lg:w-[336px]  w-full ">
+                {/* <div className="flex flex-col items-left bg-[#fff] justify-center pt-4  w-full  lg:w-[336px]">
                   <p className="bg-inherit text-[13px] text-[#80BD25] mb-1 font-semibold">
-                    First Name
+                    Event Date
                   </p>
                   <div className="h-[40px] flex justify-between items-center w-full border-[1px] border-[#ddd] bg-slate-400 rounded-md">
-                    <UserAdd className="bg-inherit h-[30px] w-[30px] text-[#ddd]" />
+                    <CalendarCheck className="bg-inherit h-[30px] w-[30px] text-[#ddd]" />
                     <input
                       type="text"
                       className="w-full  focus:outline-none h-full px-2"
-                      placeholder="First name"
-                      name="firstName"
-                      value={formData.firstName}
+                      placeholder="20-12-2024"
+                      name="eventDate"
+                      value={formData.eventDate}
                       onChange={handleInputChange}
                     />
                   </div>
-                </div>
-                <div className="flex flex-col items-left bg-[#fff] justify-center pt-4 lg:w-[336px]  w-full ">
+                </div> */}
+                <div className="flex flex-col items-left bg-[#fff] justify-center pt-4  w-full  lg:w-[336px]">
                   <p className="bg-inherit text-[13px] text-[#80BD25] mb-1 font-semibold">
-                    Middle Name
+                    Start Date
                   </p>
                   <div className="h-[40px] flex justify-between items-center w-full border-[1px] border-[#ddd] bg-slate-400 rounded-md">
-                    <UserAdd className="bg-inherit h-[30px] w-[30px] text-[#ddd]" />
+                    <CalendarCheck className="bg-inherit h-[30px] w-[30px] text-[#ddd]" />
                     <input
                       type="text"
                       className="w-full  focus:outline-none h-full px-2"
-                      placeholder="Middle name"
-                      name="middleName"
-                      value={formData.middleName}
+                      placeholder="20-12-2024"
+                      name="startDate"
+                      value={formData.startDate}
                       onChange={handleInputChange}
                     />
                   </div>
                 </div>
-                <div className="flex flex-col items-left bg-[#fff] justify-center pt-4 lg:w-[336px]  w-full ">
+                <div className="flex flex-col items-left bg-[#fff] justify-center pt-4  w-full  lg:w-[336px]">
                   <p className="bg-inherit text-[13px] text-[#80BD25] mb-1 font-semibold">
-                    Last Name
+                    Start Time
                   </p>
                   <div className="h-[40px] flex justify-between items-center w-full border-[1px] border-[#ddd] bg-slate-400 rounded-md">
-                    <UserAdd className="bg-inherit h-[30px] w-[30px] text-[#ddd]" />
-                    <input
-                      type="text"
-                      className="w-full  focus:outline-none h-full px-2"
-                      placeholder="Last name"
-                      name="lastName"
-                      value={formData.lastName}
-                      onChange={handleInputChange}
-                    />
-                  </div>
-                </div>
-                <div className="flex flex-col items-left bg-[#fff] justify-center pt-4 lg:w-[336px]  w-full ">
-                  <p className="bg-inherit text-[13px] text-[#80BD25] mb-1 font-semibold">
-                    Email Address
-                  </p>
-                  <div className="h-[40px] flex justify-between items-center w-full border-[1px] border-[#ddd] bg-slate-400 rounded-md">
-                    <Mail className="bg-inherit h-[30px] w-[30px] text-[#ddd]" />
+                    <ClockCircle className="bg-inherit h-[30px] w-[30px] text-[#ddd]" />
                     <input
                       type="email"
                       className="w-full focus:outline-none h-full px-2"
-                      placeholder="Email Address"
-                      name="email"
-                      value={formData.email}
+                      placeholder="10:30 AM"
+                      name="startTime"
+                      value={formData.startTime}
                       onChange={handleInputChange}
                     />
                   </div>
                 </div>
-                <div className="flex flex-col items-left bg-[#fff] justify-center pt-4 lg:w-[336px]  w-full ">
+                <div className="flex flex-col items-left bg-[#fff] justify-center pt-4  w-full  lg:w-[336px]">
                   <p className="bg-inherit text-[13px] text-[#80BD25] mb-1 font-semibold">
-                    Phone
+                    End Date
                   </p>
                   <div className="h-[40px] flex justify-between items-center w-full border-[1px] border-[#ddd] bg-slate-400 rounded-md">
-                    <Mobile className="bg-inherit h-[30px] w-[30px] text-[#ddd]" />
-                    <input
-                      type="number"
-                      className="w-full focus:outline-none h-full px-2"
-                      placeholder="Phone"
-                      name="phone"
-                      value={formData.phone}
-                      onChange={handleInputChange}
-                    />
-                  </div>
-                </div>
-                <div className="flex flex-col items-left bg-[#fff] justify-center pt-4 lg:w-[336px]  w-full ">
-                  <p className="bg-inherit text-[13px] text-[#80BD25] mb-1 font-semibold">
-                    Department
-                  </p>
-                  <div className="h-[40px] flex justify-between items-center w-full border-[1px] border-[#ddd] bg-slate-400 rounded-md">
-                    <UserCircleBlock className="bg-inherit h-[30px] w-[30px] text-[#ddd]" />
+                    <CalendarAdd className="bg-inherit h-[30px] w-[30px] text-[#ddd]" />
                     <input
                       type="text"
                       className="w-full focus:outline-none h-full px-2"
-                      placeholder="Department"
-                      name="department"
-                      value={formData.department}
+                      placeholder="20-12-2024"
+                      name="endDate"
+                      value={formData.endDate}
                       onChange={handleInputChange}
                     />
                   </div>
                 </div>
-                <div className="flex flex-col items-left bg-[#fff] justify-center pt-4 lg:w-[336px]  w-full ">
+                <div className="flex flex-col items-left bg-[#fff] justify-center pt-4  w-full  lg:w-[336px]">
                   <p className="bg-inherit text-[13px] text-[#80BD25] mb-1 font-semibold">
-                    Position
+                    End Time
                   </p>
                   <div className="h-[40px] flex justify-between items-center w-full border-[1px] border-[#ddd] bg-slate-400 rounded-md">
-                    <ArchiveDocument className="bg-inherit h-[30px] w-[30px] text-[#ddd]" />
+                    <ClockCircle className="bg-inherit h-[30px] w-[30px] text-[#ddd]" />
                     <input
                       type="text"
-                      name="position"
                       className="w-full focus:outline-none h-full px-2"
-                      placeholder="Position"
-                      value={formData.position}
+                      placeholder="10:30 AM"
+                      name="endTime"
+                      value={formData.endTime}
+                      onChange={handleInputChange}
+                    />
+                  </div>
+                </div>
+                <div className="flex flex-col items-left bg-[#fff] justify-center pt-4  w-full  lg:w-[336px]">
+                  <p className="bg-inherit text-[13px] text-[#80BD25] mb-1 font-semibold">
+                    Location
+                  </p>
+                  <div className="h-[40px] flex justify-between items-center w-full border-[1px] border-[#ddd] bg-slate-400 rounded-md">
+                    <ClockCircle className="bg-inherit h-[30px] w-[30px] text-[#ddd]" />
+                    <input
+                      type="text"
+                      className="w-full focus:outline-none h-full px-2"
+                      placeholder="Location"
+                      name="location"
+                      value={formData.location}
+                      onChange={handleInputChange}
+                    />
+                  </div>
+                </div>
+                <div className="flex flex-col items-left bg-[#fff] justify-center pt-4  w-full  lg:w-[336px]">
+                  <p className="bg-inherit text-[13px] text-[#80BD25] mb-1 font-semibold">
+                    Event Description
+                  </p>
+                  <div className="w-full border-[1px] border-[#ddd] rounded-md">
+                    <textarea
+                      className="w-full h-[100px] focus:outline-none p-2 resize-none bg-inherit"
+                      placeholder="Enter event description"
+                      name="description"
+                      value={formData.description}
                       onChange={handleInputChange}
                     />
                   </div>
                 </div>
                 <button
-                  className="bg-[#80BD25] h-[40px] lg:w-[336px]  w-full  rounded-md font-semibold text-[#fff] my-4"
+                  className="bg-[#80BD25] h-[40px] lg:w-[336px] rounded-md font-semibold  w-full  text-[#fff] my-4"
                   onClick={handleSubmit}
                 >
-                  Update
+                  Create
                 </button>
               </div>
             </div>
@@ -605,7 +522,7 @@ export const BaseTable = ({
                     className="mb-8 w-[30%]"
                   />
                   <h2 className="pb-4 text-center text-[25px] font-semibold bg-white text-[#16151C]">
-                    Staff Details updated Successfully.
+                    Event Details updated Successfully.
                   </h2>
                 </div>
               </div>
@@ -614,10 +531,10 @@ export const BaseTable = ({
         </AnimatePresence>
       )}
       {deleteWarn.status && (
-        <Warning
+        <EventDeleteWarn
           status={deleteWarn.status}
           msg={deleteWarn.msg}
-          userId={deleteWarn.userId}
+          eventId={deleteWarn.userId}
           closeModal={closeWarning}
         />
       )}

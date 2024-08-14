@@ -3,12 +3,12 @@ import React, { useRef, useState } from "react";
 import { AnimatePresence, motion } from "framer-motion";
 import { FaTrashAlt } from "react-icons/fa";
 import { success } from "../../../assets";
-import { delete_staff } from "../../../utils/apiService";
+import { delete_event } from "../../../utils/apiService";
 
 interface WarningProps {
   status: boolean;
   msg: string;
-  userId: string;
+  eventId: string;
   closeModal: () => void;
 }
 
@@ -17,20 +17,21 @@ const fadeInVariants = {
   visible: { opacity: 1 },
 };
 
-export const Warning: React.FC<WarningProps> = ({
+export const EventDeleteWarn: React.FC<WarningProps> = ({
   status,
   msg,
-  userId,
+  eventId,
   closeModal,
 }) => {
   const tooltipRef = useRef<HTMLDivElement>(null);
   const [deletesuccess, setDeletesuccess] = useState(false);
 
-  const handeldelstaff = async (userId: string | boolean | undefined) => {
+  const handeldelstaff = async (eventId: string | boolean | undefined) => {
     try {
-      const delstaff = await delete_staff(userId);
-      console.log(delstaff);
-      setDeletesuccess(true);
+      const res = await delete_event(eventId);
+      if (res.success === true) {
+        setDeletesuccess(true);
+      }
       window.location.reload();
     } catch (error) {
       console.log(error);
@@ -57,7 +58,7 @@ export const Warning: React.FC<WarningProps> = ({
                 className="mb-32 h-auto max-h-[540px] w-[26%] overflow-y-auto rounded-[20px] bg-[#fff] px-4 shadow-md [@media(max-width:1200px)]:w-[50%] [@media(max-width:700px)]:w-[90%]"
               >
                 <h2 className="py-4 bg-white text-center text-[25px] font-semibold ">
-                  Account Deleted!
+                  Event Deleted!
                 </h2>
                 <div className="flex w-full items-center bg-[#fff] justify-center">
                   <div className="flex flex-col items-center bg-[#fff] justify-center py-6 lg:w-[336px]">
@@ -71,7 +72,7 @@ export const Warning: React.FC<WarningProps> = ({
                       className="mb-8 w-[30%] bg-white"
                     />
                     <h2 className="pb-4 text-center text-[25px] font-semibold bg-white text-[#16151C]">
-                      Account Deleted Successfully.
+                      Event Deleted Successfully.
                     </h2>
                     <div className="flex bg-white justify-between w-full gap-3 mt-3 items-center">
                       <button
@@ -130,7 +131,7 @@ export const Warning: React.FC<WarningProps> = ({
                       </button>
                       <button
                         className="text-center text-[18px] text-[#fff] w-[50%]  py-3 rounded-lg bg-[#80BD25]"
-                        onClick={() => handeldelstaff(userId)}
+                        onClick={() => handeldelstaff(eventId)}
                       >
                         Continue
                       </button>

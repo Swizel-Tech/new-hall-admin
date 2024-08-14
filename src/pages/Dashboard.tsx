@@ -65,11 +65,11 @@ const Home = () => {
     {
       icon: FaUserFriends,
       title: "Students",
-      value: 43,
+      value: 0,
       icbg: "bg-[#E5E4FF]",
       txbg: "text-[#8280FF]",
-      chart: HiOutlineTrendingUp,
-      upcolor: "text-[#4BD991]",
+      chart: MdOutlineTrendingDown,
+      upcolor: "text-[#F83F67]",
       percentage: "",
       msg: "",
     },
@@ -87,24 +87,24 @@ const Home = () => {
     {
       icon: FaChartLine,
       title: "Books",
-      value: 100,
+      value: 0,
       icbg: "bg-[#D9F7E8]",
       txbg: "text-[#4BD991]",
       chart: MdOutlineTrendingDown,
       upcolor: "text-[#F83F67]",
-      percentage: "4.3%",
-      msg: "Down from Yesterday",
+      percentage: "",
+      msg: "",
     },
     {
       icon: RxTimer,
       title: "Boarded Students",
-      value: 2040,
+      value: 0,
       icbg: "bg-[#FFDED1]",
       txbg: "text-[#FF9871]",
-      chart: HiOutlineTrendingUp,
-      upcolor: "text-[#4BD991]",
-      percentage: "1.8%",
-      msg: "Up from Yesterday",
+      chart: MdOutlineTrendingDown,
+      upcolor: "text-[#F83F67]",
+      percentage: "",
+      msg: "",
     },
   ]);
 
@@ -159,7 +159,6 @@ const Home = () => {
   const get_all_blogs = async () => {
     try {
       const blogs = await get_blogs();
-      console.log(blogs);
       setBlogs(blogs.data);
     } catch (error) {
       console.log(error);
@@ -180,7 +179,7 @@ const Home = () => {
       <div className="mt-5 rounded-[8px]">
         <div className="z-0 flex flex-col lg:flex-row gap-4 justify-between items-start">
           <div className="w-full lg:w-[70%] bg-white p-2 rounded-lg">
-            <h2 className="bg-inherit text-left mb-4 font-bold font-DMSans text-[20px]">
+            <h2 className="bg-inherit text-left mb-2 font-bold font-DMSans text-[20px]">
               Staff
             </h2>
             <BaseTable
@@ -191,7 +190,7 @@ const Home = () => {
               showPagination={true}
             />
           </div>
-          <div className="w-full lg:w-[60%]">
+          <div className="w-full lg:w-[30%]">
             <div className="h-[400px] w-full bg-white rounded-lg border-[1px] border-[#ddd]">
               <h2 className="bg-[#80BD25] rounded-tl-lg rounded-tr-lg text-white py-2 text-center mb-4 font-bold font-DMSans text-[20px]">
                 Lates News
@@ -200,7 +199,7 @@ const Home = () => {
                 {blogs.map((blog) => (
                   <li
                     key={blog._id}
-                    className="flex bg-white border-[1px] border-[#ddd] p-2 rounded-lg mb-2 justify-between gap-2 items-start cursor-pointer hover:border-[#80BD25]"
+                    className="flex w-full bg-white border-[1px] border-[#ddd] p-2 rounded-lg mb-2 justify-between gap-2 items-start cursor-pointer hover:border-[#80BD25]"
                     onClick={() => handleViewNews(blog._id)}
                   >
                     <div className="w-full bg-white lg:w-[15%] rounded-lg">

@@ -120,6 +120,40 @@ export const new_staff = async (data: object) => {
   }
 };
 
+export const edit_staff = async (data: object, staffId: string) => {
+  try {
+    const response = await axios.put(
+      `${StringapiUrl}staff/edit_staff/${staffId}`,
+      data,
+      {
+        headers: {
+          "x-api-key": `${StringapiKey}`,
+        },
+      }
+    );
+    return response.data;
+  } catch (error) {
+    throw error;
+  }
+};
+
+export const edit_event = async (data: object, eventId: string) => {
+  try {
+    const response = await axios.put(
+      `${StringapiUrl}event/edit_event/${eventId}`,
+      data,
+      {
+        headers: {
+          "x-api-key": `${StringapiKey}`,
+        },
+      }
+    );
+    return response.data;
+  } catch (error) {
+    throw error;
+  }
+};
+
 // get all staff
 export const all_staff = async () => {
   try {
@@ -128,6 +162,23 @@ export const all_staff = async () => {
         "x-api-key": `${StringapiKey}`,
       },
     });
+    return response.data;
+  } catch (error) {
+    throw error;
+  }
+};
+
+// get event
+export const get_an_event = async (eventId: string) => {
+  try {
+    const response = await axios.get(
+      `${StringapiUrl}event/get_event/${eventId}`,
+      {
+        headers: {
+          "x-api-key": `${StringapiKey}`,
+        },
+      }
+    );
     return response.data;
   } catch (error) {
     throw error;
@@ -156,6 +207,22 @@ export const delete_staff = async (staffId: string | boolean | undefined) => {
   try {
     const response = await axios.delete(
       `${StringapiUrl}staff/delete_staff/${staffId}`,
+      {
+        headers: {
+          "x-api-key": `${StringapiKey}`,
+        },
+      }
+    );
+    return response.data;
+  } catch (error) {
+    throw error;
+  }
+};
+// delete event
+export const delete_event = async (eventId: string | boolean | undefined) => {
+  try {
+    const response = await axios.delete(
+      `${StringapiUrl}event/delete_event/${eventId}`,
       {
         headers: {
           "x-api-key": `${StringapiKey}`,

@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState } from "react";
 import { DashboardArea } from "../components/ui/layout/dashboard/DashboardArea";
 import { useUser } from "../context/user-provider";
-import { BaseTable } from "../components/table/BaseTable";
+import { CalendarTable } from "../components/table/CalendarTable";
 import {
   ClockCircle,
   CalendarCheck,
@@ -227,7 +227,7 @@ const Calendar = () => {
         </div>
         <div className="h-full mt-4 w-full">
           <div className="z-0">
-            <BaseTable
+            <CalendarTable
               tableRows={
                 searchQuery ? filteredTableRows : transactionsMockTableRows
               }
@@ -375,7 +375,7 @@ const Calendar = () => {
                   <p className="bg-inherit text-[13px] text-[#80BD25] mb-1 font-semibold">
                     Event Description
                   </p>
-                  <div className="w-full border-[1px] border-[#ddd] bg-[#ddd] rounded-md">
+                  <div className="w-full border-[1px] border-[#ddd] rounded-md">
                     <textarea
                       className="w-full h-[100px] focus:outline-none p-2 resize-none bg-inherit"
                       placeholder="Enter event description"
