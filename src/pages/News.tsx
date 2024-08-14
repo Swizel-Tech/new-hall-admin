@@ -54,11 +54,11 @@ const News = () => {
   }, []);
 
   const handleNewNews = () => {
-    navigate("/new_blog");
+    navigate("/news/new_blog");
   };
 
   const handleViewNews = (blogId: string) => {
-    navigate(`/new_blog/${blogId}`);
+    navigate(`/news/new_blog/${blogId}`);
   };
 
   const fadeInVariants = {
@@ -91,7 +91,7 @@ const News = () => {
   };
 
   return (
-    <DashboardArea title={`Welcome ${staffName}`}>
+    <DashboardArea title={`Welcome 👋 ${staffName}`}>
       <div className="mt-5 rounded-[8px]">
         <div className="z-0 flex flex-col lg:flex-row gap-4 justify-between items-start">
           <div className="w-full m-auto  h-full">

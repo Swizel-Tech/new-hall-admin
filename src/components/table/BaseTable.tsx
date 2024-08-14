@@ -7,6 +7,7 @@ import { Edit, Eye, Trash } from "react-huge-icons/outline";
 // import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { Warning } from "../ui/modals/Warning";
+import { useNavigate } from "react-router-dom";
 // import {  } from "react-huge-icons/outline";
 
 interface IBaseTable {
@@ -23,6 +24,7 @@ export const BaseTable = ({
   tableRows,
 }: IBaseTable) => {
   const [itemsPerPage] = useState(6);
+  const navigate = useNavigate();
   const [currentPage, setCurrentPage] = useState(1);
   const [deleteWarn, setDeleteWarn] = useState({
     status: false,
@@ -54,6 +56,10 @@ export const BaseTable = ({
       userId: "",
     });
   };
+  const handleStaffView = (staffId: string | boolean | undefined) => {
+    navigate(`/staff/${staffId}`);
+  };
+
   function handleTableRowAppend(
     row: string | Record<string, string | boolean | undefined>
   ) {
@@ -82,9 +88,7 @@ export const BaseTable = ({
         return (
           <div className="flex bg-white flex-row items-center gap-3">
             <Eye
-              // onClick={() =>
-              //   viewStaff(EmployeeViews.PREVIEW_EMPLOYEE, row.userId)
-              // }
+              onClick={() => handleStaffView(row.userId)}
               className="cursor-pointer bg-white text-xl"
             />
             <Edit

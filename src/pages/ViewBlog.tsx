@@ -45,7 +45,7 @@ const ViewBlog = () => {
   }, []);
 
   return (
-    <DashboardArea title={`Welcome ${staffName}`}>
+    <DashboardArea title={`Welcome 👋 ${staffName}`}>
       <div className="pt-5 bg-white px-4 rounded-[8px]">
         <div className="flex justify-end items-center gap-3 bg-white">
           <button className="float-end px-4 py-2 text-[#fff] bg-[#80BD25] rounded-lg">

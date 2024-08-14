@@ -35,11 +35,11 @@ const router = createBrowserRouter([
         element: <ViewBlog />,
       },
       {
-        path: "new_blog",
+        path: "/news/new_blog",
         element: <NewBlog />,
       },
       {
-        path: "/new_blog/:blogId",
+        path: "/news/new_blog/:blogId",
         element: <NewBlog />,
       },
       {
@@ -47,7 +47,7 @@ const router = createBrowserRouter([
         element: <News />,
       },
       {
-        path: "/staffprofile",
+        path: "/staff/:staffId",
         element: <UserProfile />,
       },
     ],

@@ -134,6 +134,23 @@ export const all_staff = async () => {
   }
 };
 
+// get all staff
+export const get_staff = async (staffId: string | boolean | undefined) => {
+  try {
+    const response = await axios.get(
+      `${StringapiUrl}staff/get_a_staff/${staffId}`,
+      {
+        headers: {
+          "x-api-key": `${StringapiKey}`,
+        },
+      }
+    );
+    return response.data;
+  } catch (error) {
+    throw error;
+  }
+};
+
 // delete staff
 export const delete_staff = async (staffId: string | boolean | undefined) => {
   try {

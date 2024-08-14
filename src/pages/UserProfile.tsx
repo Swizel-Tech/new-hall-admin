@@ -9,13 +9,16 @@ import {
   Mobile,
   ArchiveDocument,
   ArrowLeft,
-  Trash,
 } from "react-huge-icons/solid";
 import { motion } from "framer-motion";
+import { get_staff } from "../utils/apiService";
+import { useNavigate, useParams } from "react-router-dom";
 
 const UserProfile = () => {
+  const navigate = useNavigate();
   const { user } = useUser();
   const [staffName, setStaffName] = useState("");
+  const { staffId } = useParams();
   const [formData, setFormData] = useState({
     idNo: "",
     firstName: "",
@@ -25,7 +28,7 @@ const UserProfile = () => {
     phone: "",
     department: "",
     position: "",
-    picture: null as File | null,
+    picture: "",
   });
 
   const handleInputChange = (e: { target: { name: any; value: any } }) => {
@@ -39,12 +42,30 @@ const UserProfile = () => {
     setStaffName(`${user.staffRec.firstName} ${user.staffRec.lastName}`);
   }, []);
 
+  const getstaff = async () => {
+    try {
+      const res = await get_staff(staffId);
+      if (res.success === true) {
+        setFormData(res.data);
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  useEffect(() => {
+    getstaff();
+  }, []);
+
+  const handleBack = () => {
+    navigate("/staff");
+  };
   return (
-    <DashboardArea title={`Welcome ${staffName}`}>
+    <DashboardArea title={`Welcome 👋 ${staffName}`}>
       <div className="w-full flex justify-start items-end">
         <button
           className="bg-inherit mb-4 flex justify-between items-center gap-2 text-[#3B5712] px-2 py-2 rounded-lg"
-          // onClick={handleNewNews}
+          onClick={handleBack}
         >
           <motion.div
             whileHover={{ x: -5 }} // Move the arrow left by 5px on hover
@@ -58,21 +79,18 @@ const UserProfile = () => {
       <div className="w-full lg:w-[60%] rounded-lg m-auto shadow-xl">
         <div className="w-full flex bg-white p-4 justify-between items-center">
           <h2 className="bg-white text-[#000] py-2 rounded-lg text-left px-2 font-bold font-DMSans text-[18px]">
-            Staff Name
+            {formData.firstName} {formData.lastName}
           </h2>
-          <button className="">
-            <Trash className="w-[35px] h-[35px] hover:text-[#80BD25] bg-white" />
-          </button>
         </div>
         <div className="w-full rounded-lg p-4 bg-white">
           <img
-            src="https://upload.wikimedia.org/wikipedia/commons/thumb/4/47/Taiwan_2009_Tainan_City_Organic_Farm_Watermelon_FRD_7962.jpg/330px-Taiwan_2009_Tainan_City_Organic_Farm_Watermelon_FRD_7962.jpg"
+            src={formData.picture}
             alt=""
             className="rounded-full w-[150px] h-[150px] m-auto"
           />
         </div>
         <div className="w-full flex justify-center items-center flex-col bg-white">
-          <div className="w-full lg:w-[90%] flex justify-between items-center bg-white px-4 gap-4">
+          <div className="w-full lg:w-[90%] flex flex-col lg:flex-row justify-between items-center bg-white px-4 gap-4">
             <div className="flex flex-col items-left bg-[#fff] justify-center lg:w-[50%]  w-full ">
               <p className="bg-inherit text-[13px] text-[#80BD25] mb-1 font-semibold">
                 ID No.
@@ -106,7 +124,7 @@ const UserProfile = () => {
               </div>
             </div>
           </div>
-          <div className="w-full lg:w-[90%] flex justify-between items-center bg-white px-4 gap-4">
+          <div className="w-full lg:w-[90%] flex flex-col lg:flex-row justify-between items-center bg-white px-4 gap-4">
             <div className="flex flex-col items-left bg-[#fff] justify-center pt-4  lg:w-[50%]   w-full ">
               <p className="bg-inherit text-[13px] text-[#80BD25] mb-1 font-semibold">
                 Middle Name
@@ -140,7 +158,7 @@ const UserProfile = () => {
               </div>
             </div>
           </div>
-          <div className="w-full lg:w-[90%] flex justify-between items-center bg-white px-4 gap-4">
+          <div className="w-full lg:w-[90%] flex flex-col lg:flex-row justify-between items-center bg-white px-4 gap-4">
             <div className="flex flex-col items-left bg-[#fff] justify-center pt-4 lg:w-[50%]  w-full ">
               <p className="bg-inherit text-[13px] text-[#80BD25] mb-1 font-semibold">
                 Email Address
@@ -174,7 +192,7 @@ const UserProfile = () => {
               </div>
             </div>
           </div>
-          <div className="w-full lg:w-[90%] flex justify-between items-center bg-white px-4 gap-4">
+          <div className="w-full lg:w-[90%] flex flex-col lg:flex-row justify-between items-center bg-white px-4 gap-4">
             <div className="flex flex-col items-left bg-[#fff] justify-center pt-4 lg:w-[50%]  w-full ">
               <p className="bg-inherit text-[13px] text-[#80BD25] mb-1 font-semibold">
                 Department
@@ -208,7 +226,7 @@ const UserProfile = () => {
               </div>
             </div>
           </div>
-          <div className="w-full lg:w-[90%] flex justify-between items-center bg-white px-4 gap-4">
+          <div className="w-full lg:w-[90%] flex flex-col lg:flex-row justify-between items-center bg-white px-4 gap-4">
             <button
               className="bg-[#80BD25] h-[40px]  w-full  rounded-md font-semibold text-[#fff] my-4"
               // onClick={handleSubmit}

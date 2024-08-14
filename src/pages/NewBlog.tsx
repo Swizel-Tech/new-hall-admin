@@ -40,12 +40,9 @@ const NewBlog = () => {
   };
 
   useEffect(() => {
-    console.log(blogId);
     const get_News = async () => {
       try {
         const res = await get_a_blog(blogId);
-        console.log(res);
-
         setBlog({
           title: res.data.title,
           content: res.data.content,
@@ -127,7 +124,7 @@ const NewBlog = () => {
   };
 
   return (
-    <DashboardArea title={`Welcome ${staffName}`}>
+    <DashboardArea title={`Welcome 👋 ${staffName}`}>
       <div className="w-full flex justify-start items-end">
         <button
           className="bg-inherit mb-4 flex justify-between items-center gap-2 text-[#3B5712] px-2 py-2 rounded-lg"

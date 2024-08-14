@@ -170,11 +170,10 @@ const Home = () => {
     get_all_blogs();
   }, []);
   const handleViewNews = (blogId: string) => {
-    console.log(blogId);
-    navigate(`/new_blog/${blogId}`);
+    navigate(`/news/new_blog/${blogId}`);
   };
   return (
-    <DashboardArea title={`Welcome ${staffName}`}>
+    <DashboardArea title={`Welcome 👋 ${staffName}`}>
       <div className="w-full">
         <DashboardCardRow dashboardHeroCards={dashboardHeroCards} />
       </div>

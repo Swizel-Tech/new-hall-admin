@@ -229,7 +229,7 @@ const Staff = () => {
     visible: { opacity: 1 },
   };
   return (
-    <DashboardArea title={`Welcome ${staffName}`}>
+    <DashboardArea title={`Welcome 👋 ${staffName}`}>
       <div className="h-full w-full">
         <div className="w-[300px]">
           <DashboardCardRow dashboardHeroCards={dashboardHeroCards} />

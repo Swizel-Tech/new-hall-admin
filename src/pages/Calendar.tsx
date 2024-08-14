@@ -209,7 +209,7 @@ const Calendar = () => {
     visible: { opacity: 1 },
   };
   return (
-    <DashboardArea title={`Welcome ${staffName}`}>
+    <DashboardArea title={`Welcome 👋 ${staffName}`}>
       <div className="w-full">
         <div className="w-[300px]">
           <DashboardCardRow dashboardHeroCards={dashboardHeroCards} />
