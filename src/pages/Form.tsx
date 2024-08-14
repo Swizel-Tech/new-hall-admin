@@ -1,4 +1,4 @@
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { FaRegEyeSlash, FaRegUser } from "react-icons/fa";
 import { useNavigate } from "react-router-dom";
 import { RiLockPasswordLine } from "react-icons/ri";
@@ -15,10 +15,11 @@ import { success } from "../assets";
 import { useUser } from "../context/user-provider";
 import { FaArrowsRotate } from "react-icons/fa6";
 import OtpInput from "react-otp-input";
+import { error } from "../assets";
 
 interface InputState {
-  email: "";
-  password: "";
+  email: string;
+  password: string;
 }
 
 const Form = () => {
@@ -32,6 +33,7 @@ const Form = () => {
   });
   const [loading, setLoading] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
+  const [loginFailed, setLoginFailed] = useState(false);
   const [showConfirmpassword, setshowConfirmpassword] = useState(false);
   const [showCreatepass, setshowCreatepass] = useState(false);
   const [isOptsent, setOptsent] = useState(false);
@@ -89,6 +91,14 @@ const Form = () => {
     try {
       const loginres = await adminLogin(formData);
       const staffRec = loginres.data.findEmail;
+      if (rememberMe) {
+        localStorage.setItem("username", formData.email);
+        localStorage.setItem("password", formData.password);
+      } else {
+        // If rememberMe is not selected, clear stored login details
+        localStorage.removeItem("username");
+        localStorage.removeItem("password");
+      }
       setUser({ staffRec });
       if (loginres.success) {
         setLoading(false);
@@ -99,6 +109,8 @@ const Form = () => {
         }, 2000);
       }
     } catch (error) {
+      setLoading(false);
+      setLoginFailed(true);
       console.log(error);
     }
   };
@@ -124,6 +136,20 @@ const Form = () => {
       email: value,
     }));
   };
+
+  useEffect(() => {
+    const storedUsername = localStorage.getItem("username");
+    const storedPassword = localStorage.getItem("password");
+    if (storedUsername && storedPassword) {
+      setformData((prevState) => ({
+        ...prevState,
+        email: storedUsername,
+        password: storedPassword,
+      }));
+      // setIsLoginEmailValid(true);
+      setRememberMe(true);
+    }
+  }, []);
 
   const forgotPassword = () => {
     setshowForgotpass(true);
@@ -209,15 +235,18 @@ const Form = () => {
     setshowCreatepass(false);
   };
 
+  const handleModalClose = () => {
+    setLoginFailed(false);
+  };
   return (
     <>
       {loading && (
         <div className="fixed right-0 top-0 z-[999] h-full w-full bg-transparent backdrop-blur-[10px] transition-[.5s]"></div>
       )}
-      <div className="p-2 lg:p-8 w-full">
+      <div className="p-2 lg:px-8 w-full">
         {showforgotPassword && (
           <button
-            className="float-end px-4 py-2 text-[#fff] bg-green-900 rounded-lg"
+            className="float-end px-4 py-2 text-[#fff] bg-[#80BD25] rounded-lg"
             onClick={handleLogin}
           >
             Login
@@ -296,7 +325,7 @@ const Form = () => {
                       ) : (
                         <button
                           onClick={handleNewSubmit}
-                          className="w-full mt-8 bg-green-900 text-[16px] rounded-lg font-semibold text-[#fff] h-[50px]"
+                          className="w-full mt-8 bg-[#80BD25] text-[16px] rounded-lg font-semibold text-[#fff] h-[50px]"
                         >
                           Submit
                         </button>
@@ -329,7 +358,7 @@ const Form = () => {
                       ) : (
                         <button
                           onClick={handleOtpverified}
-                          className="w-full mt-8 bg-green-900 text-[16px] rounded-lg font-semibold text-[#fff] h-[50px]"
+                          className="w-full mt-8 bg-[#80BD25] text-[16px] rounded-lg font-semibold text-[#fff] h-[50px]"
                         >
                           verify OTP
                         </button>
@@ -364,7 +393,7 @@ const Form = () => {
                   ) : (
                     <button
                       onClick={handleOtpsent}
-                      className="w-full mt-8 bg-green-900 text-[16px] rounded-lg font-semibold text-[#fff] h-[50px]"
+                      className="w-full mt-8 bg-[#80BD25] text-[16px] rounded-lg font-semibold text-[#fff] h-[50px]"
                     >
                       Send OTP
                     </button>
@@ -416,14 +445,14 @@ const Form = () => {
                 <div className="my-3 flex items-center justify-between gap-2">
                   <input
                     type="checkbox"
-                    className="h-[24px] w-[24px] border-[4px] checked:bg-green-900"
+                    className="h-[24px] w-[24px] border-[4px] checked:bg-[#80BD25]"
                     checked={rememberMe}
                     onChange={(e) => setRememberMe(e.target.checked)}
                   />
                   <h2 className="text-[16px] font-semibold">Remember Me</h2>
                 </div>
                 <button onClick={forgotPassword} className="my-3">
-                  <h2 className="text-[16px] font-normal text-green-900">
+                  <h2 className="text-[16px] font-normal text-[#80BD25]">
                     Forgot Password
                   </h2>
                 </button>
@@ -435,7 +464,7 @@ const Form = () => {
               ) : (
                 <button
                   onClick={handleSubmit}
-                  className="w-full mt-8 bg-green-900 text-[14px] rounded-lg font-semibold text-[#fff] h-[50px]"
+                  className="w-full mt-8 bg-[#80BD25] text-[14px] rounded-lg font-semibold text-[#fff] h-[50px]"
                 >
                   Login
                 </button>
@@ -477,6 +506,53 @@ const Form = () => {
                       <p className="pb-4 text-center text-[14px] text-[#a59fc4] bg-white">
                         Proceed to your Dashboard
                       </p>
+                    </div>
+                  </div>
+                </div>
+              </motion.div>
+            </AnimatePresence>
+          )}
+          {loginFailed && (
+            <AnimatePresence>
+              <motion.div
+                initial={{ opacity: 0, y: -20 }}
+                animate={{
+                  opacity: loginFailed ? 1 : 0,
+                  y: loginFailed ? 0 : -20,
+                }}
+                exit={{ opacity: 0, y: 20 }}
+                transition={{ duration: 0.3 }}
+                className="fixed bottom-0 left-0 right-0 top-0 z-[9999] bg-white flex h-full min-h-screen w-full items-center justify-center overflow-y-auto"
+              >
+                <div
+                  ref={tooltipRef as React.RefObject<HTMLDivElement>}
+                  className={
+                    "mb-32 h-auto max-h-[540px] w-[26%] overflow-y-auto rounded-[20px] bg-[#fff] px-4 shadow-md [@media(max-width:1200px)]:w-[50%] [@media(max-width:700px)]:w-[90%]"
+                  }
+                >
+                  <div className="flex w-full  items-center bg-inherit justify-center">
+                    <div className="flex flex-col items-center bg-inherit justify-center py-6 lg:w-[336px]">
+                      <motion.img
+                        src={error}
+                        alt=""
+                        initial="hidden"
+                        animate="visible"
+                        variants={fadeInVariants}
+                        transition={{ duration: 6 }}
+                        className="mb-8 w-[30%] bg-inherit"
+                      />
+                      <h2 className="pb-4 text-center text-[25px] bg-inherit font-semibold text-[#16151C]">
+                        Login Failed
+                      </h2>
+                      <p className="pb-4 text-center text-[14px] bg-inherit text-[#a59fc4]">
+                        Check the login Credentials and try again.
+                      </p>
+                      <button
+                        onClick={handleModalClose}
+                        className="h-auto w-full rounded-[10px] bg-[#80BD25] text-center text-[#fff] sm:h-[46px] [@media(max-width:800px)]:p-3"
+                      >
+                        Return to login
+                      </button>
                     </div>
                   </div>
                 </div>

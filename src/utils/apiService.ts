@@ -20,6 +20,25 @@ export const adminLogin = async (data: object) => {
   }
 };
 
+// Logout
+export const log_out = async (userId: string) => {
+  const data = {};
+  try {
+    const response = await axios.post(
+      `${StringapiUrl}auth/logout/${userId}`,
+      data,
+      {
+        headers: {
+          "x-api-key": `${StringapiKey}`,
+        },
+      }
+    );
+    return response.data;
+  } catch (error) {
+    throw error;
+  }
+};
+
 export const forgot_pass = async (data: object) => {
   try {
     const response = await axios.post(
@@ -158,6 +177,65 @@ export const get_all_event = async () => {
         "x-api-key": `${StringapiKey}`,
       },
     });
+    return response.data;
+  } catch (error) {
+    throw error;
+  }
+};
+
+// get all Blog
+export const get_blogs = async () => {
+  try {
+    const response = await axios.get(`${StringapiUrl}blog/get_blogs`, {
+      headers: {
+        "x-api-key": `${StringapiKey}`,
+      },
+    });
+    return response.data;
+  } catch (error) {
+    throw error;
+  }
+};
+
+// get a single Blog
+export const get_a_blog = async (blogId: string | undefined) => {
+  try {
+    const response = await axios.get(`${StringapiUrl}blog/get_blog/${blogId}`, {
+      headers: {
+        "x-api-key": `${StringapiKey}`,
+      },
+    });
+    return response.data;
+  } catch (error) {
+    throw error;
+  }
+};
+
+// get a single Blog
+export const create_a_blog = async (data: object) => {
+  try {
+    const response = await axios.post(`${StringapiUrl}blog/new_blog`, data, {
+      headers: {
+        "x-api-key": `${StringapiKey}`,
+      },
+    });
+    return response.data;
+  } catch (error) {
+    throw error;
+  }
+};
+
+// get a single Blog
+export const del_a_blog = async (blogId: string) => {
+  try {
+    const response = await axios.delete(
+      `${StringapiUrl}blog/del_blog/${blogId}`,
+      {
+        headers: {
+          "x-api-key": `${StringapiKey}`,
+        },
+      }
+    );
     return response.data;
   } catch (error) {
     throw error;

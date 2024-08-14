@@ -1,5 +1,10 @@
 import { SideNavProps } from "./SideNav";
-import { Home, User, DocumentText } from "react-huge-icons/outline";
+import {
+  Home,
+  User,
+  DocumentText,
+  ArchiveDocument,
+} from "react-huge-icons/outline";
 // import { BsDatabase, BsFillBarChartFill } from "react-icons/bs";
 
 export const sidebarData: SideNavProps[] = [
@@ -13,20 +18,13 @@ export const sidebarData: SideNavProps[] = [
   {
     href: "/staff",
     icon: User,
-    text: "Staff",
+    text: "Active Staff",
     dropdown: false,
   },
-  // {
-  //   href: "/settings",
-  //   icon: BsDatabase,
-  //   text: "Data Repository",
-  //   dropdown: false,
-  // },
-  // { href: "/settings", icon: BsDatabase, text: "Training", dropdown: false },
-  // {
-  //   href: "/settings",
-  //   icon: BsFillBarChartFill,
-  //   text: "Report & Insights",
-  //   dropdown: true,
-  // },
+  {
+    href: "/news",
+    icon: ArchiveDocument,
+    text: "School News",
+    dropdown: false,
+  },
 ];

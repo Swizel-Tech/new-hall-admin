@@ -4,6 +4,9 @@ import { SideNav } from "./SideNav";
 import { IoIosLogOut } from "react-icons/io";
 import { african } from "../../../assets";
 import { MdKeyboardArrowLeft } from "react-icons/md";
+import { log_out } from "../../../utils/apiService";
+import { useUser } from "../../../context/user-provider";
+import { useNavigate } from "react-router-dom";
 
 interface SidebarProps {
   isOpen: boolean;
@@ -11,11 +14,22 @@ interface SidebarProps {
 }
 
 export const Sidebar: React.FC<SidebarProps> = ({ isOpen, toggleSidebar }) => {
+  const { user } = useUser();
   const [isSidebarOpen, setIsSidebarOpen] = useState(true);
+  const navigate = useNavigate();
 
   const handleSlideIn = () => {
     setIsSidebarOpen(!isSidebarOpen);
     toggleSidebar();
+  };
+
+  const handleLogout = async () => {
+    try {
+      await log_out(user.staffRec._id);
+      navigate("/");
+    } catch (error) {
+      console.log(error);
+    }
   };
 
   return (
@@ -59,7 +73,10 @@ export const Sidebar: React.FC<SidebarProps> = ({ isOpen, toggleSidebar }) => {
         <div className="absolute bottom-0 flex justify-start flex-col w-full items-start bg-inherit gap-y-4">
           <div className="mt-auto flex justify-center gap-2 items-center bg-inherit text-[#fff]">
             <IoIosLogOut className="bg-inherit text-[#80BD25]" />
-            <button className="bg-inherit text-[13px] text-[#80BD25] font-semibold">
+            <button
+              className="bg-inherit text-[13px] text-[#80BD25] font-semibold"
+              onClick={handleLogout}
+            >
               Logout Account
             </button>
           </div>

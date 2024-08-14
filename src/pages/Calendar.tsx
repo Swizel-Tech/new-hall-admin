@@ -155,8 +155,6 @@ const Calendar = () => {
   const handleSubmit = async () => {
     try {
       const res = await new_event(formData, user.staffRec._id);
-      console.log(res);
-
       if (res) {
         all_event();
         setisNewEvent(false);
@@ -428,7 +426,7 @@ const Calendar = () => {
                     className="mb-8 w-[30%]"
                   />
                   <h2 className="pb-4 text-center text-[25px] font-semibold bg-white text-[#16151C]">
-                    Staff Created Successfully.
+                    Event Created Successfully.
                   </h2>
                 </div>
               </div>

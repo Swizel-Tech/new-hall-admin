@@ -167,9 +167,9 @@ export const BaseTable = ({
           </tbody>
         </table>
       </div>
-      <div className="flex items-center justify-between rounded-[8px]">
+      <div className="flex bg-white items-center justify-between rounded-[8px]">
         {/* <div className="font-semibold bg-white">Page {currentPage}</div> */}
-        <div className="mt-4 flex items-center w-full justify-between">
+        <div className="mt-4 bg-white flex items-center w-full justify-between">
           <button
             className="rounded-lg flex justify-center border-[1px] border-[#e6e6e6] bg-[#fcfdfd] items-center gap-2 p-1"
             onClick={() => paginate(currentPage - 1)}

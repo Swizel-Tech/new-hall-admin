@@ -10,20 +10,35 @@ import { HiOutlineTrendingUp } from "react-icons/hi";
 import { MdOutlineTrendingDown } from "react-icons/md";
 import { BaseTable } from "../components/table/BaseTable";
 import { useUser } from "../context/user-provider";
-import { all_staff } from "../utils/apiService";
-import { format } from "date-fns";
+import { all_staff, get_blogs } from "../utils/apiService";
+import { useNavigate } from "react-router-dom";
 
 const transactionTableHeaders = [
   "ID CARD NO",
   "FIRST NAME",
-  "MIDDLE NAME",
   "LAST NAME",
   "EMAIL ADDRESS",
   "PHONE NO",
   "POSITION",
-  "DATE CREATED",
   "DEPARTMENT",
 ];
+
+type Blog = {
+  _id: string;
+  title: string;
+  content: string;
+  author: {
+    _id: string;
+    firstName: string;
+    lastName: string;
+    email: string;
+  };
+  tags: string[];
+  images: string[];
+  published: boolean;
+  createdAt: string;
+  updatedAt: string;
+};
 
 interface IBaseTable {
   showPagination?: boolean;
@@ -34,9 +49,11 @@ interface IBaseTable {
 
 const Home = () => {
   const [filteredTableRows] = useState<IBaseTable["tableRows"]>([]);
+  const [blogs, setBlogs] = useState<Blog[]>([]);
   const [searchQuery] = useState("");
   const { user } = useUser();
   const [staffName, setStaffName] = useState("");
+  const navigate = useNavigate();
 
   useEffect(() => {
     setStaffName(`${user.staffRec.firstName} ${user.staffRec.lastName}`);
@@ -90,93 +107,10 @@ const Home = () => {
       msg: "Up from Yesterday",
     },
   ]);
-  // const [transactionsMockTableRows] = useState([
-  //   [
-  //     { hasAvatar: false, statusText: "", img: "", name: "00001" },
-  //     "Children Training",
-  //     "108 Federal Housing Estate Abuja",
-  //     "30 Mar, 2024",
-  //     "Training",
-  //     { statusText: "Completed" },
-  //   ],
-  //   [
-  //     { hasAvatar: false, statusText: "", img: "", name: "00002" },
-  //     "Children Training",
-  //     "108 Federal Housing Estate Abuja",
-  //     "30 Mar, 2024",
-  //     "Training",
-  //     { statusText: "Processing" },
-  //   ],
-  //   [
-  //     { hasAvatar: false, statusText: "", img: "", name: "00003" },
-  //     "Children Training",
-  //     "108 Federal Housing Estate Abuja",
-  //     "30 Mar, 2024",
-  //     "Training",
-  //     { statusText: "Completed" },
-  //   ],
-  //   [
-  //     { hasAvatar: false, statusText: "", img: "", name: "00004" },
-  //     "Children Training",
-  //     "108 Federal Housing Estate Abuja",
-  //     "30 Mar, 2024",
-  //     "Training",
-  //     { statusText: "Rejected" },
-  //   ],
-  //   [
-  //     { hasAvatar: false, statusText: "", img: "", name: "00005" },
-  //     "Children Training",
-  //     "108 Federal Housing Estate Abuja",
-  //     "30 Mar, 2024",
-  //     "Training",
-  //     { statusText: "Processing" },
-  //   ],
-  //   [
-  //     { hasAvatar: false, statusText: "", img: "", name: "00006" },
-  //     "Children Training",
-  //     "108 Federal Housing Estate Abuja",
-  //     "30 Mar, 2024",
-  //     "Training",
-  //     { statusText: "Rejected" },
-  //   ],
-  //   [
-  //     { hasAvatar: false, statusText: "", img: "", name: "00007" },
-  //     "Children Training",
-  //     "108 Federal Housing Estate Abuja",
-  //     "30 Mar, 2024",
-  //     "Training",
-  //     { statusText: "Completed" },
-  //   ],
-  //   [
-  //     { hasAvatar: false, statusText: "", img: "", name: "00008" },
-  //     "Children Training",
-  //     "108 Federal Housing Estate Abuja",
-  //     "30 Mar, 2024",
-  //     "Training",
-  //     { statusText: "Rejected" },
-  //   ],
-  //   [
-  //     { hasAvatar: false, statusText: "", img: "", name: "00009" },
-  //     "Children Training",
-  //     "108 Federal Housing Estate Abuja",
-  //     "30 Mar, 2024",
-  //     "Training",
-  //     { statusText: "Completed" },
-  //   ],
-  //   [
-  //     { hasAvatar: false, statusText: "", img: "", name: "00010" },
-  //     "Children Training",
-  //     "108 Federal Housing Estate Abuja",
-  //     "30 Mar, 2024",
-  //     "Training",
-  //     { statusText: "Rejected" },
-  //   ],
-  // ]);
+
   const [transactionsMockTableRows, setTransactionsMockTableRows] = useState([
     [
-      { hasAvatar: true, statusText: "", img: "", name: "" },
-      "",
-      "",
+      { hasAvatar: false, statusText: "", img: "", name: "" },
       "",
       "",
       "",
@@ -194,19 +128,17 @@ const Home = () => {
       if (Array.isArray(findUserArray)) {
         const newRows = findUserArray.map((user) => [
           {
-            hasAvatar: true,
+            hasAvatar: false,
             statusText: "Pending",
             img: user.picture,
             name: user.idNo,
             userId: user._id,
           },
           user.firstName,
-          user.middleName,
           user.lastName,
           user.email,
           user.phone,
           user.position,
-          format(new Date(user.createdAt), "MMM do, yyyy, h:mm:ss a"),
           user.department,
         ]);
 
@@ -223,24 +155,89 @@ const Home = () => {
       console.log(error);
     }
   };
+
+  const get_all_blogs = async () => {
+    try {
+      const blogs = await get_blogs();
+      console.log(blogs);
+      setBlogs(blogs.data);
+    } catch (error) {
+      console.log(error);
+    }
+  };
   useEffect(() => {
     getall_staff();
+    get_all_blogs();
   }, []);
+  const handleViewNews = (blogId: string) => {
+    console.log(blogId);
+    navigate(`/new_blog/${blogId}`);
+  };
   return (
     <DashboardArea title={`Welcome ${staffName}`}>
       <div className="w-full">
         <DashboardCardRow dashboardHeroCards={dashboardHeroCards} />
       </div>
       <div className="mt-5 rounded-[8px]">
-        <div className="z-0">
-          <h2>Staff</h2>
-          <BaseTable
-            tableRows={
-              searchQuery ? filteredTableRows : transactionsMockTableRows
-            }
-            headers={transactionTableHeaders}
-            showPagination={true}
-          />
+        <div className="z-0 flex flex-col lg:flex-row gap-4 justify-between items-start">
+          <div className="w-full lg:w-[70%] bg-white p-2 rounded-lg">
+            <h2 className="bg-inherit text-left mb-4 font-bold font-DMSans text-[20px]">
+              Staff
+            </h2>
+            <BaseTable
+              tableRows={
+                searchQuery ? filteredTableRows : transactionsMockTableRows
+              }
+              headers={transactionTableHeaders}
+              showPagination={true}
+            />
+          </div>
+          <div className="w-full lg:w-[60%]">
+            <div className="h-[400px] w-full bg-white rounded-lg border-[1px] border-[#ddd]">
+              <h2 className="bg-[#80BD25] rounded-tl-lg rounded-tr-lg text-white py-2 text-center mb-4 font-bold font-DMSans text-[20px]">
+                Lates News
+              </h2>
+              <ul className="flex justify-start flex-col gap-2 rounded-lg h-[320px] overflow-y-auto items-start bg-[#fff] p-2">
+                {blogs.map((blog) => (
+                  <li
+                    key={blog._id}
+                    className="flex bg-white border-[1px] border-[#ddd] p-2 rounded-lg mb-2 justify-between gap-2 items-start cursor-pointer hover:border-[#80BD25]"
+                    onClick={() => handleViewNews(blog._id)}
+                  >
+                    <div className="w-full bg-white lg:w-[15%] rounded-lg">
+                      {blog.images.length > 0 && (
+                        <img
+                          src={`http://localhost:3001/${blog.images[0].replace(
+                            /\\/g,
+                            "/"
+                          )}`}
+                          alt={`Blog Image`}
+                          className="rounded-lg"
+                        />
+                      )}
+                    </div>
+                    <div className="w-full bg-white lg:w-[85%]">
+                      <h3 className="bg-white text-[#000] text-left font-bold font-DMSans text-[14px]">
+                        {blog.title}
+                      </h3>
+                      <div
+                        dangerouslySetInnerHTML={{ __html: blog.content }}
+                        className="overflow-x-hidden px-2 rounded-lg overflow-y-hidden h-[20px] text-[#000] text-left font-normal font-DMSans text-[14px]"
+                      ></div>
+                      <p className="bg-white mt-2 overflow-x-hidden overflow-y-hidden text-[#000] text-left font-normal font-DMSans text-[12px]">
+                        <span className="font-semibold italic bg-inherit">
+                          Author :
+                        </span>{" "}
+                        <span className="italic bg-inherit">
+                          {blog.author.firstName} {blog.author.lastName}
+                        </span>
+                      </p>
+                    </div>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          </div>
         </div>
       </div>
     </DashboardArea>
