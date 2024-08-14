@@ -26,7 +26,7 @@ export const Avatar = (props: AvatarProps) => {
 
   const imagePath = img?.replace(/\\/g, "/");
 
-  const imageUrl = `http://localhost:3001/${imagePath}`;
+  const imageUrl = `https://new-hall-server.onrender.com/${imagePath}`;
   console.log(imageUrl);
 
   const cnFn = (...inputs: ClassArray) =>

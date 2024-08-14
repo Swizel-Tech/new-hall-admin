@@ -134,7 +134,7 @@ const News = () => {
                   <div className="bg-white w-[25%] rounded-lg">
                     {blog.images.length > 0 && (
                       <img
-                        src={`http://localhost:3001/${blog.images[0].replace(
+                        src={`https://new-hall-server.onrender.com/${blog.images[0].replace(
                           /\\/g,
                           "/"
                         )}`}
