@@ -334,10 +334,10 @@ export const UserTable = ({
       } else if (row.action === true && row.userId) {
         return (
           <div className="flex bg-white flex-row items-center gap-3">
-            <Eye
+            {/* <Eye
               onClick={() => handleStaffView(row.userId)}
               className="cursor-pointer bg-white text-xl"
-            />
+            /> */}
             <Edit
               onClick={() => hndeleditstaff(row.userId)}
               className="cursor-pointer bg-white text-xl"
