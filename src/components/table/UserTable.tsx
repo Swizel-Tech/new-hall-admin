@@ -15,15 +15,12 @@ import {
   UserCircleBlock,
 } from "react-huge-icons/outline";
 import OtpInput from "react-otp-input";
-
-// import { delete_staff } from "../../utils/apiService";
-// import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import { Warning } from "../ui/modals/Warning";
 import { useNavigate } from "react-router-dom";
 import { AnimatePresence, motion } from "framer-motion";
-import { get_staff, edit_staff, verify_otp } from "../../utils/apiService";
+import { get_user, edit_user, verify_otp } from "../../utils/apiService";
 import { success } from "../../assets";
+import { UserDeleteWarn } from "../ui/modals/UserDeleteWarn";
 // import {  } from "react-huge-icons/outline";
 
 interface IBaseTable {
@@ -33,7 +30,7 @@ interface IBaseTable {
   tableRows: (string | Record<string, string | boolean | undefined>)[][];
 }
 
-export const BaseTable = ({
+export const UserTable = ({
   // showPagination = false,
   headers,
   headersClassName,
@@ -195,9 +192,9 @@ export const BaseTable = ({
   };
 
   // get Staff
-  const getstaff = async () => {
+  const getuser = async () => {
     try {
-      const res = await get_staff(isEditstaff.staffId);
+      const res = await get_user(isEditstaff.staffId);
       if (res.success === true) {
         setFormData(res.data);
         setPicture(res.data.picture);
@@ -208,7 +205,7 @@ export const BaseTable = ({
   };
 
   useEffect(() => {
-    getstaff();
+    getuser();
   }, [isEditstaff.staffId]);
 
   const handleSubmit = async () => {
@@ -225,9 +222,7 @@ export const BaseTable = ({
       if (formData.picture) {
         formDataToSend.append("file", formData.picture);
       }
-      const res = await edit_staff(formDataToSend, isEditstaff.staffId);
-      console.log(res);
-
+      const res = await edit_user(formDataToSend, isEditstaff.staffId);
       if (res.success === true) {
         setisEditstaff({
           status: false,
@@ -760,7 +755,7 @@ export const BaseTable = ({
                     initial="hidden"
                     animate="visible"
                     variants={fadeInVariants}
-                    transition={{ duration: 2 }}
+                    transition={{ duration: 6 }}
                     className="mb-8 w-[30%] bg-white"
                   />
                   <h2 className="pb-4 text-center text-[25px] font-semibold bg-white text-[#16151C]">
@@ -814,7 +809,7 @@ export const BaseTable = ({
         </AnimatePresence>
       )}
       {deleteWarn.status && (
-        <Warning
+        <UserDeleteWarn
           status={deleteWarn.status}
           msg={deleteWarn.msg}
           userId={deleteWarn.userId}

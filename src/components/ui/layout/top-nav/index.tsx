@@ -1,10 +1,11 @@
 import { Avatar } from "../../avatar";
-import { avatar } from "../../../../assets";
 import { CiCircleChevDown } from "react-icons/ci";
 import { useUser } from "../../../../context/user-provider";
 import { useEffect, useRef, useState } from "react";
 import { motion } from "framer-motion";
 import { LogoutOpen, User } from "react-huge-icons/outline";
+import { log_out } from "../../../../utils/apiService";
+import { useNavigate } from "react-router-dom";
 
 export interface TopNavProps {
   title: string;
@@ -13,6 +14,8 @@ export interface TopNavProps {
 export const TopNav = ({ title }: TopNavProps) => {
   const { user } = useUser();
   const [staffName, setStaffName] = useState("");
+  const [userPicture, setPicture] = useState("");
+  const navigate = useNavigate();
   const tooltipRef = useRef<HTMLElement>(null);
   const [profileClicked, setprofileClicked] = useState(false);
 
@@ -44,8 +47,19 @@ export const TopNav = ({ title }: TopNavProps) => {
   }, [profileClicked]);
 
   useEffect(() => {
+    console.log(user);
+    setPicture(user.staffRec.picture);
     setStaffName(`${user.staffRec.lastName}`);
   }, []);
+
+  const handleLogout = async () => {
+    try {
+      await log_out(user.staffRec._id);
+      navigate("/");
+    } catch (error) {
+      console.log(error);
+    }
+  };
 
   return (
     <header className="flex bg-white h-[60px] px-10 w-full justify-between items-center max-md:items-center">
@@ -58,7 +72,7 @@ export const TopNav = ({ title }: TopNavProps) => {
       </div>
       <div className="relative flex justify-between bg-white items-center gap-4 lg:gap-9">
         <Avatar
-          img={avatar}
+          img={userPicture}
           name={staffName}
           avatarClassName="md:h-11 h-36px w-36px rounded-full md:w-11"
           textClassName="font-medium text-sm bg-white max-md:hidden"
@@ -90,7 +104,10 @@ export const TopNav = ({ title }: TopNavProps) => {
               <User className="text-xl bg-white" />
               <h3 className="bg-white">My Profile</h3>
             </div>
-            <div className="ronded-[3px] bg-white flex cursor-pointer items-center justify-start gap-3 px-4 py-2 text-base font-light text-[#F45B69]">
+            <div
+              className="ronded-[3px] bg-white flex cursor-pointer items-center justify-start gap-3 px-4 py-2 text-base font-light text-[#F45B69]"
+              onClick={handleLogout}
+            >
               <LogoutOpen className="text-xl bg-white" />
               <h3 className="bg-white">Logout</h3>
             </div>

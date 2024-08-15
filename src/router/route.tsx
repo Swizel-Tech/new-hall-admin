@@ -8,6 +8,7 @@ import ViewBlog from "../pages/ViewBlog";
 import NewBlog from "../pages/NewBlog";
 import News from "../pages/News";
 import UserProfile from "../pages/UserProfile";
+import Operators from "../pages/Operators";
 
 const router = createBrowserRouter([
   {
@@ -49,6 +50,10 @@ const router = createBrowserRouter([
       {
         path: "/staff/:staffId",
         element: <UserProfile />,
+      },
+      {
+        path: "/operators",
+        element: <Operators />,
       },
     ],
   },

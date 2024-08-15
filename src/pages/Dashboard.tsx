@@ -1,4 +1,11 @@
-import { useEffect, useState } from "react";
+import {
+  // JSXElementConstructor,
+  // ReactElement,
+  // ReactNode,
+  // ReactPortal,
+  useEffect,
+  useState,
+} from "react";
 import { DashboardArea } from "../components/ui/layout/dashboard/DashboardArea";
 import { DashboardCardRow } from "../components/grouped-components/dashboard-card-row";
 import { DashboardCardProps } from "../components/ui/dashboard-card";
@@ -12,6 +19,8 @@ import { BaseTable } from "../components/table/BaseTable";
 import { useUser } from "../context/user-provider";
 import { all_staff, get_blogs } from "../utils/apiService";
 import { useNavigate } from "react-router-dom";
+// import FullCalendar from "@fullcalendar/react";
+// import dayGridPlugin from "@fullcalendar/daygrid";
 
 const transactionTableHeaders = [
   "ID CARD NO",
@@ -156,6 +165,25 @@ const Home = () => {
     }
   };
 
+  // const myEventsList: any = [
+  //   {
+  //     title: "School Opening",
+  //     start: new Date("2024-11-20"),
+  //   },
+  //   {
+  //     title: "Opening Ceremony",
+  //     start: new Date("2024-11-1"),
+  //   },
+  //   {
+  //     title: "School Festival",
+  //     start: new Date("2024-11-5"),
+  //   },
+  //   {
+  //     title: "Opening festival",
+  //     start: new Date("2024-11-13"),
+  //   },
+  // ];
+
   const get_all_blogs = async () => {
     try {
       const blogs = await get_blogs();
@@ -171,6 +199,36 @@ const Home = () => {
   const handleViewNews = (blogId: string) => {
     navigate(`/news/new_blog/${blogId}`);
   };
+  // function renderEventContent(eventInfo: {
+  //   timeText:
+  //     | string
+  //     | number
+  //     | boolean
+  //     | ReactElement<any, string | JSXElementConstructor<any>>
+  //     | Iterable<ReactNode>
+  //     | ReactPortal
+  //     | null
+  //     | undefined;
+  //   event: {
+  //     title:
+  //       | string
+  //       | number
+  //       | boolean
+  //       | ReactElement<any, string | JSXElementConstructor<any>>
+  //       | Iterable<ReactNode>
+  //       | ReactPortal
+  //       | null
+  //       | undefined;
+  //   };
+  // }) {
+  //   return (
+  //     <div className="bg-[#cdf4cd]">
+  //       <i className="text-[green] bg-inherit text-[10px] font-semibold px-2">
+  //         {eventInfo.event.title}
+  //       </i>
+  //     </div>
+  //   );
+  // }
   return (
     <DashboardArea title={`Welcome 👋 ${staffName}`}>
       <div className="w-full">
@@ -192,7 +250,7 @@ const Home = () => {
           </div>
           <div className="w-full lg:w-[30%]">
             <div className="h-[400px] w-full bg-white rounded-lg border-[1px] border-[#ddd]">
-              <h2 className="bg-[#80BD25] rounded-tl-lg rounded-tr-lg text-white py-2 text-center mb-4 font-bold font-DMSans text-[20px]">
+              <h2 className="bg-[#323232] rounded-tl-lg rounded-tr-lg text-white py-2 text-center mb-4 font-bold font-DMSans text-[20px]">
                 Lates News
               </h2>
               <ul className="flex justify-start flex-col gap-2 rounded-lg h-[320px] overflow-y-auto items-start bg-[#fff] p-2">
@@ -237,6 +295,18 @@ const Home = () => {
             </div>
           </div>
         </div>
+        {/* <div className="calendar-container !bg-white w-[50%] p-4 mt-4 rounded-lg">
+          <FullCalendar
+            plugins={[dayGridPlugin]}
+            initialView="dayGridMonth"
+            weekends={false}
+            events={myEventsList}
+            eventContent={renderEventContent}
+            dayCellContent={(content) => {
+              return <div>{content.dayNumberText}</div>;
+            }}
+          />
+        </div> */}
       </div>
     </DashboardArea>
   );

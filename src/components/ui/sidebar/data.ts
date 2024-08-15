@@ -4,6 +4,7 @@ import {
   User,
   DocumentText,
   ArchiveDocument,
+  UserAdd,
 } from "react-huge-icons/outline";
 // import { BsDatabase, BsFillBarChartFill } from "react-icons/bs";
 
@@ -25,6 +26,12 @@ export const sidebarData: SideNavProps[] = [
     href: "/news",
     icon: ArchiveDocument,
     text: "School News",
+    dropdown: false,
+  },
+  {
+    href: "/operators",
+    icon: UserAdd,
+    text: "Opearator",
     dropdown: false,
   },
 ];

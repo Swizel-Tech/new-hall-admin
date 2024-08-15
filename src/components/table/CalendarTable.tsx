@@ -181,11 +181,13 @@ export const CalendarTable = ({
           status: false,
           staffId: "",
         });
-        window.location.reload();
         setisEditSuccess(true);
         setTimeout(() => {
           setisEditSuccess(false);
-        }, 1000);
+        }, 3000);
+        setTimeout(() => {
+          window.location.reload();
+        }, 4000);
       }
     } catch (error) {
       console.log(error);
@@ -518,8 +520,8 @@ export const CalendarTable = ({
                     initial="hidden"
                     animate="visible"
                     variants={fadeInVariants}
-                    transition={{ duration: 6 }}
-                    className="mb-8 w-[30%]"
+                    transition={{ duration: 2 }}
+                    className="mb-8 w-[30%] bg-white"
                   />
                   <h2 className="pb-4 text-center text-[25px] font-semibold bg-white text-[#16151C]">
                     Event Details updated Successfully.

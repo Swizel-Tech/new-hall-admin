@@ -103,6 +103,32 @@ export const new_user = async (data: object) => {
   }
 };
 
+export const new_operator = async (data: object) => {
+  try {
+    const response = await axios.post(`${StringapiUrl}auth/register`, data, {
+      headers: {
+        "x-api-key": `${StringapiKey}`,
+      },
+    });
+    return response.data;
+  } catch (error) {
+    throw error;
+  }
+};
+
+export const verify_otp = async (data: object) => {
+  try {
+    const response = await axios.post(`${StringapiUrl}auth/verify_otp`, data, {
+      headers: {
+        "x-api-key": `${StringapiKey}`,
+      },
+    });
+    return response.data;
+  } catch (error) {
+    throw error;
+  }
+};
+
 export const new_staff = async (data: object) => {
   try {
     const response = await axios.post(
@@ -124,6 +150,23 @@ export const edit_staff = async (data: object, staffId: string) => {
   try {
     const response = await axios.put(
       `${StringapiUrl}staff/edit_staff/${staffId}`,
+      data,
+      {
+        headers: {
+          "x-api-key": `${StringapiKey}`,
+        },
+      }
+    );
+    return response.data;
+  } catch (error) {
+    throw error;
+  }
+};
+
+export const edit_user = async (data: object, userId: string) => {
+  try {
+    const response = await axios.put(
+      `${StringapiUrl}auth/edit_user/${userId}`,
       data,
       {
         headers: {
@@ -168,6 +211,20 @@ export const all_staff = async () => {
   }
 };
 
+// get all User
+export const all_operators = async () => {
+  try {
+    const response = await axios.get(`${StringapiUrl}auth/get_all_users`, {
+      headers: {
+        "x-api-key": `${StringapiKey}`,
+      },
+    });
+    return response.data;
+  } catch (error) {
+    throw error;
+  }
+};
+
 // get event
 export const get_an_event = async (eventId: string) => {
   try {
@@ -185,11 +242,26 @@ export const get_an_event = async (eventId: string) => {
   }
 };
 
-// get all staff
 export const get_staff = async (staffId: string | boolean | undefined) => {
   try {
     const response = await axios.get(
       `${StringapiUrl}staff/get_a_staff/${staffId}`,
+      {
+        headers: {
+          "x-api-key": `${StringapiKey}`,
+        },
+      }
+    );
+    return response.data;
+  } catch (error) {
+    throw error;
+  }
+};
+
+export const get_user = async (userId: string | boolean | undefined) => {
+  try {
+    const response = await axios.get(
+      `${StringapiUrl}auth/get_a_user/${userId}`,
       {
         headers: {
           "x-api-key": `${StringapiKey}`,
@@ -207,6 +279,23 @@ export const delete_staff = async (staffId: string | boolean | undefined) => {
   try {
     const response = await axios.delete(
       `${StringapiUrl}staff/delete_staff/${staffId}`,
+      {
+        headers: {
+          "x-api-key": `${StringapiKey}`,
+        },
+      }
+    );
+    return response.data;
+  } catch (error) {
+    throw error;
+  }
+};
+
+// delete staff
+export const delete_user = async (userId: string | boolean | undefined) => {
+  try {
+    const response = await axios.delete(
+      `${StringapiUrl}auth/delete_user/${userId}`,
       {
         headers: {
           "x-api-key": `${StringapiKey}`,
