@@ -9,18 +9,23 @@ import {
 import { DashboardArea } from "../components/ui/layout/dashboard/DashboardArea";
 import { DashboardCardRow } from "../components/grouped-components/dashboard-card-row";
 import { DashboardCardProps } from "../components/ui/dashboard-card";
-import { FaUserFriends } from "react-icons/fa";
-import { BsBoxFill } from "react-icons/bs";
-import { FaChartLine } from "react-icons/fa6";
-import { RxTimer } from "react-icons/rx";
-import { HiOutlineTrendingUp } from "react-icons/hi";
-import { MdOutlineTrendingDown } from "react-icons/md";
 import { BaseTable } from "../components/table/BaseTable";
 import { useUser } from "../context/user-provider";
-import { all_staff, get_blogs } from "../utils/apiService";
+import {
+  all_staff,
+  get_blogs,
+  all_operators,
+  get_all_event,
+} from "../utils/apiService";
 import { useNavigate } from "react-router-dom";
 // import FullCalendar from "@fullcalendar/react";
 // import dayGridPlugin from "@fullcalendar/daygrid";
+import {
+  Calendar,
+  DocumentText,
+  UserBlock,
+  UserCircle,
+} from "react-huge-icons/outline";
 
 const transactionTableHeaders = [
   "ID CARD NO",
@@ -72,45 +77,45 @@ const Home = () => {
     DashboardCardProps[]
   >([
     {
-      icon: FaUserFriends,
-      title: "Students",
+      icon: Calendar,
+      title: "Calendar Events",
       value: 0,
       icbg: "bg-[#E5E4FF]",
       txbg: "text-[#8280FF]",
-      chart: MdOutlineTrendingDown,
+      chart: Calendar,
       upcolor: "text-[#F83F67]",
       percentage: "",
       msg: "",
     },
     {
-      icon: BsBoxFill,
+      icon: UserCircle,
       title: "Staff",
       value: 0,
       icbg: "bg-[#FFF3D6]",
       txbg: "text-[#FEC53D]",
-      chart: HiOutlineTrendingUp,
+      chart: UserCircle,
       upcolor: "text-[#4BD991]",
-      percentage: "1.3%",
-      msg: "Up from past week",
+      percentage: "",
+      msg: "",
     },
     {
-      icon: FaChartLine,
-      title: "Books",
+      icon: UserBlock,
+      title: "Operators",
       value: 0,
       icbg: "bg-[#D9F7E8]",
       txbg: "text-[#4BD991]",
-      chart: MdOutlineTrendingDown,
+      chart: UserBlock,
       upcolor: "text-[#F83F67]",
       percentage: "",
       msg: "",
     },
     {
-      icon: RxTimer,
-      title: "Boarded Students",
+      icon: DocumentText,
+      title: "News",
       value: 0,
       icbg: "bg-[#FFDED1]",
       txbg: "text-[#FF9871]",
-      chart: MdOutlineTrendingDown,
+      chart: DocumentText,
       upcolor: "text-[#F83F67]",
       percentage: "",
       msg: "",
@@ -131,8 +136,12 @@ const Home = () => {
   const getall_staff = async () => {
     try {
       const res = await all_staff();
+      const operators = await all_operators();
+      const all_event = await get_all_event();
       const findUserArray = res.data;
       const totalCount = res.totalCount;
+      const eventcount = all_event.totalCount;
+      const operatorsCount = operators.totalCount;
 
       if (Array.isArray(findUserArray)) {
         const newRows = findUserArray.map((user) => [
@@ -155,6 +164,20 @@ const Home = () => {
         setDashboardHeroCards((prevCards) =>
           prevCards.map((card) =>
             card.title === "Staff" ? { ...card, value: totalCount } : card
+          )
+        );
+        setDashboardHeroCards((prevCards) =>
+          prevCards.map((card) =>
+            card.title === "Operators"
+              ? { ...card, value: operatorsCount }
+              : card
+          )
+        );
+        setDashboardHeroCards((prevCards) =>
+          prevCards.map((card) =>
+            card.title === "Calendar Events"
+              ? { ...card, value: eventcount }
+              : card
           )
         );
       } else {
@@ -187,7 +210,13 @@ const Home = () => {
   const get_all_blogs = async () => {
     try {
       const blogs = await get_blogs();
+      const total = blogs.totalCount;
       setBlogs(blogs.data);
+      setDashboardHeroCards((prevCards) =>
+        prevCards.map((card) =>
+          card.title === "News" ? { ...card, value: total } : card
+        )
+      );
     } catch (error) {
       console.log(error);
     }
@@ -200,15 +229,6 @@ const Home = () => {
     navigate(`/news/new_blog/${blogId}`);
   };
   // function renderEventContent(eventInfo: {
-  //   timeText:
-  //     | string
-  //     | number
-  //     | boolean
-  //     | ReactElement<any, string | JSXElementConstructor<any>>
-  //     | Iterable<ReactNode>
-  //     | ReactPortal
-  //     | null
-  //     | undefined;
   //   event: {
   //     title:
   //       | string
@@ -251,7 +271,7 @@ const Home = () => {
           <div className="w-full lg:w-[30%]">
             <div className="h-[400px] w-full bg-white rounded-lg border-[1px] border-[#ddd]">
               <h2 className="bg-[#323232] rounded-tl-lg rounded-tr-lg text-white py-2 text-center mb-4 font-bold font-DMSans text-[20px]">
-                Lates News
+                Latest News
               </h2>
               <ul className="flex justify-start flex-col gap-2 rounded-lg h-[320px] overflow-y-auto items-start bg-[#fff] p-2">
                 {blogs.map((blog) => (

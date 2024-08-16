@@ -2,15 +2,9 @@ import { useEffect, useRef, useState } from "react";
 import { DashboardArea } from "../components/ui/layout/dashboard/DashboardArea";
 import { useUser } from "../context/user-provider";
 import { CalendarTable } from "../components/table/CalendarTable";
-import {
-  ClockCircle,
-  CalendarCheck,
-  CalendarAdd,
-  Plus,
-} from "react-huge-icons/solid";
+import { CalendarAdd, Plus } from "react-huge-icons/solid";
 import { DashboardCardRow } from "../components/grouped-components/dashboard-card-row";
 import { DashboardCardProps } from "../components/ui/dashboard-card";
-import { HiOutlineTrendingUp } from "react-icons/hi";
 import { AnimatePresence, motion } from "framer-motion";
 import { new_event, get_all_event } from "../utils/apiService";
 import { format } from "date-fns";
@@ -42,16 +36,10 @@ const Calendar = () => {
   const [staffName, setStaffName] = useState("");
   const [isNewEvent, setisNewEvent] = useState(false);
   const [registrationSuccess, setregistrationSuccess] = useState(false);
+  const [selectedFile, setSelectedFile] = useState<File | null>(null);
   const [searchQuery] = useState("");
-  const [formData, setFormData] = useState({
-    title: "",
-    eventDate: "",
-    description: "",
-    location: "",
-    startDate: "",
-    startTime: "",
-    endDate: "",
-    endTime: "",
+  const [event, setEvent] = useState({
+    calendar: null as File | null,
   });
   useEffect(() => {
     setStaffName(`${user.staffRec.firstName} ${user.staffRec.lastName}`);
@@ -65,7 +53,7 @@ const Calendar = () => {
       value: 0,
       icbg: "bg-[#E5E4FF]",
       txbg: "text-[#8280FF]",
-      chart: HiOutlineTrendingUp,
+      chart: CalendarAdd,
       upcolor: "text-[#4BD991]",
       percentage: "",
       msg: "",
@@ -85,14 +73,6 @@ const Calendar = () => {
       { action: true, userId: "" },
     ],
   ]);
-
-  const handleInputChange = (e: { target: { name: any; value: any } }) => {
-    const { name, value } = e.target;
-    setFormData({
-      ...formData,
-      [name]: value,
-    });
-  };
 
   const all_event = async () => {
     try {
@@ -155,24 +135,21 @@ const Calendar = () => {
 
   const handleSubmit = async () => {
     try {
-      const res = await new_event(formData, user.staffRec._id);
+      const formDataToSend = new FormData();
+      if (event.calendar) {
+        formDataToSend.append("file", event.calendar);
+      }
+      const res = await new_event(formDataToSend, user.staffRec._id);
       if (res) {
         all_event();
         setisNewEvent(false);
         setregistrationSuccess(true);
-        setFormData({
-          title: "",
-          eventDate: "",
-          description: "",
-          location: "",
-          startDate: "",
-          startTime: "",
-          endDate: "",
-          endTime: "",
+        setEvent({
+          calendar: null,
         });
         setTimeout(() => {
           setregistrationSuccess(false);
-        }, 1000);
+        }, 4000);
       }
     } catch (error) {
       console.log(error);
@@ -209,6 +186,23 @@ const Calendar = () => {
     hidden: { opacity: 0 },
     visible: { opacity: 1 },
   };
+
+  const handlePictureChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (file) {
+      setEvent({ ...event, calendar: file });
+      setSelectedFile(() => file);
+    }
+  };
+
+  useEffect(() => {
+    console.log(event);
+  }, [event.calendar]);
+
+  const removeFile = () => {
+    setSelectedFile(null);
+  };
+
   return (
     <DashboardArea title={`Welcome 👋 ${staffName}`}>
       <div className="w-full">
@@ -222,7 +216,7 @@ const Calendar = () => {
           >
             <Plus className={"bg-transparent w-[20px] h-[20px]"} />
             <p className="text-[12px] bg-transparent hidden sm:block font-bold font-DMSans">
-              New Event
+              Upload Calendar
             </p>
           </button>
         </div>
@@ -258,132 +252,63 @@ const Calendar = () => {
             >
               <div className="flex w-full flex-col items-center bg-[#fff] justify-center">
                 <h2 className="font-bold text-center w-full bg-white text-[20px] font-DMSans mt-4">
-                  New Event
+                  Calendar Upload
                 </h2>
                 <div className="flex flex-col items-left bg-[#fff] justify-center pt-2 w-full lg:w-[336px]">
-                  <p className="bg-inherit text-[13px] text-[#80BD25] mb-1 font-semibold">
-                    Event Title
-                  </p>
-                  <div className="h-[40px] flex justify-between items-center w-full border-[1px] border-[#ddd] bg-slate-400 rounded-md">
-                    <CalendarAdd className="bg-inherit h-[30px] w-[30px] text-[#ddd]" />
-                    <input
-                      type="text"
-                      className="w-full focus:outline-none h-full px-2"
-                      placeholder="Event Title"
-                      name="title"
-                      value={formData.title}
-                      onChange={handleInputChange}
-                    />
-                  </div>
-                </div>
-                <div className="flex flex-col items-left bg-[#fff] justify-center pt-4  w-full  lg:w-[336px]">
-                  <p className="bg-inherit text-[13px] text-[#80BD25] mb-1 font-semibold">
-                    Event Date
-                  </p>
-                  <div className="h-[40px] flex justify-between items-center w-full border-[1px] border-[#ddd] bg-slate-400 rounded-md">
-                    <CalendarCheck className="bg-inherit h-[30px] w-[30px] text-[#ddd]" />
-                    <input
-                      type="text"
-                      className="w-full  focus:outline-none h-full px-2"
-                      placeholder="20-12-2024"
-                      name="eventDate"
-                      value={formData.eventDate}
-                      onChange={handleInputChange}
-                    />
-                  </div>
-                </div>
-                <div className="flex flex-col items-left bg-[#fff] justify-center pt-4  w-full  lg:w-[336px]">
-                  <p className="bg-inherit text-[13px] text-[#80BD25] mb-1 font-semibold">
-                    Start Date
-                  </p>
-                  <div className="h-[40px] flex justify-between items-center w-full border-[1px] border-[#ddd] bg-slate-400 rounded-md">
-                    <CalendarCheck className="bg-inherit h-[30px] w-[30px] text-[#ddd]" />
-                    <input
-                      type="text"
-                      className="w-full  focus:outline-none h-full px-2"
-                      placeholder="20-12-2024"
-                      name="startDate"
-                      value={formData.startDate}
-                      onChange={handleInputChange}
-                    />
-                  </div>
-                </div>
-                <div className="flex flex-col items-left bg-[#fff] justify-center pt-4  w-full  lg:w-[336px]">
-                  <p className="bg-inherit text-[13px] text-[#80BD25] mb-1 font-semibold">
-                    Start Time
-                  </p>
-                  <div className="h-[40px] flex justify-between items-center w-full border-[1px] border-[#ddd] bg-slate-400 rounded-md">
-                    <ClockCircle className="bg-inherit h-[30px] w-[30px] text-[#ddd]" />
-                    <input
-                      type="email"
-                      className="w-full focus:outline-none h-full px-2"
-                      placeholder="10:30 AM"
-                      name="startTime"
-                      value={formData.startTime}
-                      onChange={handleInputChange}
-                    />
-                  </div>
-                </div>
-                <div className="flex flex-col items-left bg-[#fff] justify-center pt-4  w-full  lg:w-[336px]">
-                  <p className="bg-inherit text-[13px] text-[#80BD25] mb-1 font-semibold">
-                    End Date
-                  </p>
-                  <div className="h-[40px] flex justify-between items-center w-full border-[1px] border-[#ddd] bg-slate-400 rounded-md">
-                    <CalendarAdd className="bg-inherit h-[30px] w-[30px] text-[#ddd]" />
-                    <input
-                      type="text"
-                      className="w-full focus:outline-none h-full px-2"
-                      placeholder="20-12-2024"
-                      name="endDate"
-                      value={formData.endDate}
-                      onChange={handleInputChange}
-                    />
-                  </div>
-                </div>
-                <div className="flex flex-col items-left bg-[#fff] justify-center pt-4  w-full  lg:w-[336px]">
-                  <p className="bg-inherit text-[13px] text-[#80BD25] mb-1 font-semibold">
-                    End Time
-                  </p>
-                  <div className="h-[40px] flex justify-between items-center w-full border-[1px] border-[#ddd] bg-slate-400 rounded-md">
-                    <ClockCircle className="bg-inherit h-[30px] w-[30px] text-[#ddd]" />
-                    <input
-                      type="text"
-                      className="w-full focus:outline-none h-full px-2"
-                      placeholder="10:30 AM"
-                      name="endTime"
-                      value={formData.endTime}
-                      onChange={handleInputChange}
-                    />
-                  </div>
-                </div>
-                <div className="flex flex-col items-left bg-[#fff] justify-center pt-4  w-full  lg:w-[336px]">
-                  <p className="bg-inherit text-[13px] text-[#80BD25] mb-1 font-semibold">
-                    Location
-                  </p>
-                  <div className="h-[40px] flex justify-between items-center w-full border-[1px] border-[#ddd] bg-slate-400 rounded-md">
-                    <ClockCircle className="bg-inherit h-[30px] w-[30px] text-[#ddd]" />
-                    <input
-                      type="text"
-                      className="w-full focus:outline-none h-full px-2"
-                      placeholder="Location"
-                      name="location"
-                      value={formData.location}
-                      onChange={handleInputChange}
-                    />
-                  </div>
-                </div>
-                <div className="flex flex-col items-left bg-[#fff] justify-center pt-4  w-full  lg:w-[336px]">
-                  <p className="bg-inherit text-[13px] text-[#80BD25] mb-1 font-semibold">
-                    Event Description
-                  </p>
-                  <div className="w-full border-[1px] border-[#ddd] rounded-md">
-                    <textarea
-                      className="w-full h-[100px] focus:outline-none p-2 resize-none bg-inherit"
-                      placeholder="Enter event description"
-                      name="description"
-                      value={formData.description}
-                      onChange={handleInputChange}
-                    />
+                  {selectedFile === null && (
+                    <p className="bg-inherit text-[13px] text-[#80BD25] mb-4 font-semibold">
+                      Select an excel File (.xlsx)
+                    </p>
+                  )}
+                  <div className="h-full w-full m-auto flex justify-center items-center bg-white rounded-md">
+                    {selectedFile ? (
+                      <div className="bg-white w-full">
+                        <button
+                          className="mb-3 rounded-lg bg-[#80BD25] p-2 text-center text-[14px] text-[#fff] font-semibold"
+                          onClick={removeFile}
+                        >
+                          Change file
+                        </button>
+                        <motion.p
+                          initial={{ scale: 0 }}
+                          animate={{ scale: 1 }}
+                          transition={{ duration: 1.5 }}
+                          exit={{ scale: 0 }}
+                          className="bg-white font-bold text-left w-full text-[20px] font-DMSans my-4"
+                        >
+                          {selectedFile.name}
+                        </motion.p>
+                        {/* <motion.p
+                          initial={{ scale: 0 }}
+                          animate={{ scale: 1 }}
+                          transition={{ duration: 1.5 }}
+                          exit={{ scale: 0 }}
+                          src={selectedFile}
+                          alt="Selected"
+                          className=" h-[180px] w-[180px] rounded-[10px] border-[1px] border-themeGrey/20"
+                        /> */}
+                      </div>
+                    ) : (
+                      <motion.div
+                        initial={{ scale: 0 }}
+                        animate={{ scale: 1 }}
+                        transition={{ duration: 1.5 }}
+                        exit={{ scale: 0 }}
+                      >
+                        <label className="inline-block">
+                          <input
+                            type="file"
+                            name="calendar"
+                            onChange={handlePictureChange}
+                            className="hidden"
+                            accept=".xlsx, .xls"
+                          />
+                          <div className="inset-0 flex h-[60px] w-[20px] m-auto items-center  justify-center rounded-[10px] border-[1px] border-[#80BD25] lg:w-[180px]">
+                            <CalendarAdd fontSize={40} />
+                          </div>
+                        </label>
+                      </motion.div>
+                    )}
                   </div>
                 </div>
                 <button

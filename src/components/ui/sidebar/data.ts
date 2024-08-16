@@ -31,7 +31,7 @@ export const sidebarData: SideNavProps[] = [
   {
     href: "/operators",
     icon: UserAdd,
-    text: "Opearator",
+    text: "Operator",
     dropdown: false,
   },
 ];

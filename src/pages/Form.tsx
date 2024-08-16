@@ -91,6 +91,8 @@ const Form = () => {
     try {
       const loginres = await adminLogin(formData);
       const staffRec = loginres.data.findEmail;
+      console.log(staffRec);
+
       if (rememberMe) {
         localStorage.setItem("username", formData.email);
         localStorage.setItem("password", formData.password);

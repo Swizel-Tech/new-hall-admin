@@ -14,7 +14,6 @@ import {
 import { Camera } from "react-huge-icons/outline";
 import { DashboardCardRow } from "../components/grouped-components/dashboard-card-row";
 import { DashboardCardProps } from "../components/ui/dashboard-card";
-import { HiOutlineTrendingUp } from "react-icons/hi";
 import { AnimatePresence, motion } from "framer-motion";
 import { new_operator, all_operators } from "../utils/apiService";
 import { format } from "date-fns";
@@ -72,7 +71,7 @@ const Operators = () => {
       value: 0,
       icbg: "bg-[#E5E4FF]",
       txbg: "text-[#8280FF]",
-      chart: HiOutlineTrendingUp,
+      chart: UserCommunity,
       upcolor: "text-[#4BD991]",
       percentage: "",
       msg: "",

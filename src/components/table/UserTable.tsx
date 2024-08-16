@@ -6,17 +6,15 @@ import {
   ArchiveDocument,
   Camera,
   Edit,
-  Eye,
   IdCard,
   Mail,
   Mobile,
-  Trash,
+  //   Trash,
   UserAdd,
   UserCircleBlock,
 } from "react-huge-icons/outline";
 import OtpInput from "react-otp-input";
 import "react-toastify/dist/ReactToastify.css";
-import { useNavigate } from "react-router-dom";
 import { AnimatePresence, motion } from "framer-motion";
 import { get_user, edit_user, verify_otp } from "../../utils/apiService";
 import { success } from "../../assets";
@@ -37,7 +35,6 @@ export const UserTable = ({
   tableRows,
 }: IBaseTable) => {
   const [itemsPerPage] = useState(4);
-  const navigate = useNavigate();
   const [otp, setOtp] = useState<string>("");
   const [currentPage, setCurrentPage] = useState(1);
   const [staffpicture, setPicture] = useState("");
@@ -78,17 +75,17 @@ export const UserTable = ({
 
   const paginate = (pageNumber: number) => setCurrentPage(pageNumber);
 
-  const hndelstaff = async (userId: string | boolean | undefined) => {
-    if (typeof userId === "string") {
-      setDeleteWarn({
-        status: true,
-        msg: "Are you sure you want to delete this Account?",
-        userId: userId,
-      });
-    } else {
-      console.error("Invalid userId:", userId);
-    }
-  };
+  //   const hndelstaff = async (userId: string | boolean | undefined) => {
+  //     if (typeof userId === "string") {
+  //       setDeleteWarn({
+  //         status: true,
+  //         msg: "Are you sure you want to delete this Account?",
+  //         userId: userId,
+  //       });
+  //     } else {
+  //       console.error("Invalid userId:", userId);
+  //     }
+  //   };
   const hndeleditstaff = async (userId: string | boolean | undefined) => {
     if (typeof userId === "string") {
       setisEditstaff({
@@ -116,9 +113,6 @@ export const UserTable = ({
       msg: "",
       userId: "",
     });
-  };
-  const handleStaffView = (staffId: string | boolean | undefined) => {
-    navigate(`/staff/${staffId}`);
   };
 
   useEffect(() => {
@@ -342,10 +336,10 @@ export const UserTable = ({
               onClick={() => hndeleditstaff(row.userId)}
               className="cursor-pointer bg-white text-xl"
             />
-            <Trash
+            {/* <Trash
               onClick={() => hndelstaff(row.userId)}
               className="cursor-pointer bg-white text-xl"
-            />
+            /> */}
           </div>
         );
       } else if (row.hasAvatar === true) {
