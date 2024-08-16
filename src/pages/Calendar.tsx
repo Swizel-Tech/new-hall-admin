@@ -209,7 +209,16 @@ const Calendar = () => {
         <div className="w-[300px]">
           <DashboardCardRow dashboardHeroCards={dashboardHeroCards} />
         </div>
-        <div className="w-full flex justify-end items-end">
+        <div className="w-full flex justify-end gap-3 items-end">
+          <button
+            className="bg-[#e98256] mb-4 flex justify-between items-center gap-2 text-[#fff] px-2 py-2 rounded-lg"
+            onClick={() => setisNewEvent(!isNewEvent)}
+          >
+            <Plus className={"bg-transparent w-[20px] h-[20px]"} />
+            <p className="text-[12px] bg-transparent hidden sm:block font-bold font-DMSans">
+              Upload PDF
+            </p>
+          </button>
           <button
             className="bg-[#3B5712] mb-4 flex justify-between items-center gap-2 text-[#fff] px-2 py-2 rounded-lg"
             onClick={() => setisNewEvent(!isNewEvent)}
