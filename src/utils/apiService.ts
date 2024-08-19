@@ -294,8 +294,9 @@ export const delete_staff = async (staffId: string | boolean | undefined) => {
 // delete staff
 export const delete_user = async (userId: string | boolean | undefined) => {
   try {
-    const response = await axios.delete(
+    const response = await axios.put(
       `${StringapiUrl}auth/delete_user/${userId}`,
+      {},
       {
         headers: {
           "x-api-key": `${StringapiKey}`,
@@ -307,6 +308,24 @@ export const delete_user = async (userId: string | boolean | undefined) => {
     throw error;
   }
 };
+// delete staff
+export const activate_user = async (userId: string | boolean | undefined) => {
+  try {
+    const response = await axios.put(
+      `${StringapiUrl}auth/activate_user/${userId}`,
+      {},
+      {
+        headers: {
+          "x-api-key": `${StringapiKey}`,
+        },
+      }
+    );
+    return response.data;
+  } catch (error) {
+    throw error;
+  }
+};
+
 // delete event
 export const delete_event = async (eventId: string | boolean | undefined) => {
   try {
@@ -403,6 +422,37 @@ export const del_a_blog = async (blogId: string) => {
   try {
     const response = await axios.delete(
       `${StringapiUrl}blog/del_blog/${blogId}`,
+      {
+        headers: {
+          "x-api-key": `${StringapiKey}`,
+        },
+      }
+    );
+    return response.data;
+  } catch (error) {
+    throw error;
+  }
+};
+
+// upload calendar PDF
+export const upload_pdf = async (data: object) => {
+  try {
+    const response = await axios.post(`${StringapiUrl}event/upload_pdf`, data, {
+      headers: {
+        "x-api-key": `${StringapiKey}`,
+      },
+    });
+    return response.data;
+  } catch (error) {
+    throw error;
+  }
+};
+
+// upload calendar PDF
+export const get_pdf = async (fileName: string) => {
+  try {
+    const response = await axios.get(
+      `${StringapiUrl}event/check_pdf/${fileName}`,
       {
         headers: {
           "x-api-key": `${StringapiKey}`,

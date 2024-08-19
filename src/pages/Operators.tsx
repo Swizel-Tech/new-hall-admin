@@ -29,6 +29,7 @@ const transactionTableHeaders = [
   "POSITION",
   "DATE CREATED",
   "DEPARTMENT",
+  "VERIFICATION",
   "STATUS",
   "Action",
 ];
@@ -87,6 +88,7 @@ const Operators = () => {
       "",
       "",
       "",
+      { active: true, userId: "" },
       { verified: true, userId: "" },
       { action: true, userId: "" },
     ],
@@ -104,6 +106,8 @@ const Operators = () => {
     try {
       const res = await all_operators();
       const findUserArray = res.data;
+      console.log(findUserArray);
+
       const totalCount = res.totalCount;
 
       if (Array.isArray(findUserArray)) {
@@ -124,6 +128,10 @@ const Operators = () => {
           user.department,
           {
             verified: user.accountverified,
+            userId: user._id,
+          },
+          {
+            active: user.active,
             userId: user._id,
           },
           {

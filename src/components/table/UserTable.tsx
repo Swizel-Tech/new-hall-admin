@@ -9,7 +9,7 @@ import {
   IdCard,
   Mail,
   Mobile,
-  //   Trash,
+  // Trash,
   UserAdd,
   UserCircleBlock,
 } from "react-huge-icons/outline";
@@ -19,6 +19,7 @@ import { AnimatePresence, motion } from "framer-motion";
 import { get_user, edit_user, verify_otp } from "../../utils/apiService";
 import { success } from "../../assets";
 import { UserDeleteWarn } from "../ui/modals/UserDeleteWarn";
+import { UserActivate } from "../ui/modals/UserActivate";
 // import {  } from "react-huge-icons/outline";
 
 interface IBaseTable {
@@ -69,23 +70,39 @@ export const UserTable = ({
     msg: "",
     userId: "",
   });
+  const [activateWarn, setActivateWarn] = useState({
+    status: false,
+    msg: "",
+    userId: "",
+  });
   const indexOfLastItem = currentPage * itemsPerPage;
   const indexOfFirstItem = indexOfLastItem - itemsPerPage;
   const currentItems = tableRows.slice(indexOfFirstItem, indexOfLastItem);
 
   const paginate = (pageNumber: number) => setCurrentPage(pageNumber);
 
-  //   const hndelstaff = async (userId: string | boolean | undefined) => {
-  //     if (typeof userId === "string") {
-  //       setDeleteWarn({
-  //         status: true,
-  //         msg: "Are you sure you want to delete this Account?",
-  //         userId: userId,
-  //       });
-  //     } else {
-  //       console.error("Invalid userId:", userId);
-  //     }
-  //   };
+  const hndelstaff = async (userId: string | boolean | undefined) => {
+    if (typeof userId === "string") {
+      setDeleteWarn({
+        status: true,
+        msg: "Are you sure you want to de-activate this User?",
+        userId: userId,
+      });
+    } else {
+      console.error("Invalid userId:", userId);
+    }
+  };
+  const hndelactivatestaff = async (userId: string | boolean | undefined) => {
+    if (typeof userId === "string") {
+      setActivateWarn({
+        status: true,
+        msg: "Are you sure you want to Activate this User?",
+        userId: userId,
+      });
+    } else {
+      console.error("Invalid userId:", userId);
+    }
+  };
   const hndeleditstaff = async (userId: string | boolean | undefined) => {
     if (typeof userId === "string") {
       setisEditstaff({
@@ -113,6 +130,12 @@ export const UserTable = ({
       msg: "",
       userId: "",
     });
+    setActivateWarn({
+      status: false,
+      msg: "",
+      userId: "",
+    });
+    window.location.reload();
   };
 
   useEffect(() => {
@@ -323,6 +346,24 @@ export const UserTable = ({
             onClick={() => handleVerifyUser(row.userId)}
           >
             Verify
+          </button>
+        );
+      } else if (row.active === true && row.userId) {
+        return (
+          <button
+            className="bg-[#fff] text-[#F3685B] flex justify-center text-[12px] items-center w-[90px] rounded-[4px] py-1"
+            onClick={() => hndelstaff(row.userId)}
+          >
+            De-Activate
+          </button>
+        );
+      } else if (row.active === false && row.userId) {
+        return (
+          <button
+            className="bg-[#fff] text-[#4BD991] flex justify-center text-[12px] items-center w-[90px] rounded-[4px] py-1"
+            onClick={() => hndelactivatestaff(row.userId)}
+          >
+            Activate
           </button>
         );
       } else if (row.action === true && row.userId) {
@@ -807,6 +848,14 @@ export const UserTable = ({
           status={deleteWarn.status}
           msg={deleteWarn.msg}
           userId={deleteWarn.userId}
+          closeModal={closeWarning}
+        />
+      )}
+      {activateWarn.status && (
+        <UserActivate
+          status={activateWarn.status}
+          msg={activateWarn.msg}
+          userId={activateWarn.userId}
           closeModal={closeWarning}
         />
       )}

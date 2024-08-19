@@ -3,7 +3,7 @@ import React, { useRef, useState } from "react";
 import { AnimatePresence, motion } from "framer-motion";
 import { FaTrashAlt } from "react-icons/fa";
 import { success } from "../../../assets";
-import { delete_user } from "../../../utils/apiService";
+import { activate_user } from "../../../utils/apiService";
 
 interface WarningProps {
   status: boolean;
@@ -17,7 +17,7 @@ const fadeInVariants = {
   visible: { opacity: 1 },
 };
 
-export const UserDeleteWarn: React.FC<WarningProps> = ({
+export const UserActivate: React.FC<WarningProps> = ({
   status,
   msg,
   userId,
@@ -28,10 +28,10 @@ export const UserDeleteWarn: React.FC<WarningProps> = ({
 
   const handeldelstaff = async (userId: string | boolean | undefined) => {
     try {
-      const delstaff = await delete_user(userId);
+      const delstaff = await activate_user(userId);
       console.log(delstaff);
       setDeletesuccess(true);
-      // window.location.reload();
+      //   window.location.reload();
     } catch (error) {
       console.log(error);
     }
@@ -57,7 +57,7 @@ export const UserDeleteWarn: React.FC<WarningProps> = ({
                 className="mb-32 h-auto max-h-[540px] w-[26%] overflow-y-auto rounded-[20px] bg-[#fff] px-4 shadow-md [@media(max-width:1200px)]:w-[50%] [@media(max-width:700px)]:w-[90%]"
               >
                 <h2 className="py-4 bg-white text-center text-[25px] font-semibold ">
-                  Account Deleted!
+                  Account Activated!
                 </h2>
                 <div className="flex w-full items-center bg-[#fff] justify-center">
                   <div className="flex flex-col items-center bg-[#fff] justify-center py-6 lg:w-[336px]">
@@ -67,11 +67,11 @@ export const UserDeleteWarn: React.FC<WarningProps> = ({
                       initial="hidden"
                       animate="visible"
                       variants={fadeInVariants}
-                      transition={{ duration: 6 }}
+                      transition={{ duration: 1 }}
                       className="mb-8 w-[30%] bg-white"
                     />
                     <h2 className="pb-4 text-center text-[25px] font-semibold bg-white text-[#16151C]">
-                      Account Deleted Successfully.
+                      Account Activated Successfully.
                     </h2>
                     <div className="flex bg-white justify-between w-full gap-3 mt-3 items-center">
                       <button
@@ -105,7 +105,7 @@ export const UserDeleteWarn: React.FC<WarningProps> = ({
                 className="mb-32 h-auto max-h-[540px] w-[26%] overflow-y-auto rounded-[20px] bg-[#fff] px-4 shadow-md [@media(max-width:1200px)]:w-[50%] [@media(max-width:700px)]:w-[90%]"
               >
                 <h2 className="py-4 bg-white text-center text-[25px] font-semibold ">
-                  De-Activate Account
+                  Activate Account
                 </h2>
                 <div className="flex w-full items-center bg-[#fff] justify-center">
                   <div className="flex flex-col items-center bg-[#fff] justify-center py-6 lg:w-[336px]">

@@ -6,7 +6,13 @@ import { CalendarAdd, Plus } from "react-huge-icons/solid";
 import { DashboardCardRow } from "../components/grouped-components/dashboard-card-row";
 import { DashboardCardProps } from "../components/ui/dashboard-card";
 import { AnimatePresence, motion } from "framer-motion";
-import { new_event, get_all_event } from "../utils/apiService";
+import { FaFilePdf } from "react-icons/fa";
+import {
+  new_event,
+  upload_pdf,
+  get_all_event,
+  get_pdf,
+} from "../utils/apiService";
 import { format } from "date-fns";
 import { success } from "../assets";
 
@@ -33,8 +39,10 @@ const Calendar = () => {
   const tooltipRef = useRef<HTMLElement>(null);
   const { user } = useUser();
   const [filteredTableRows] = useState<IBaseTable["tableRows"]>([]);
+  const [pdfUrl, setPdfUrl] = useState("");
   const [staffName, setStaffName] = useState("");
   const [isNewEvent, setisNewEvent] = useState(false);
+  const [isNewEventPdf, setisNewEventPdf] = useState(false);
   const [registrationSuccess, setregistrationSuccess] = useState(false);
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
   const [searchQuery] = useState("");
@@ -155,6 +163,45 @@ const Calendar = () => {
       console.log(error);
     }
   };
+
+  useEffect(() => {
+    const calendar_pdf = async () => {
+      try {
+        const res = await get_pdf("Calendar.pdf");
+        if (res.message === "File exists") {
+          console.log(res);
+
+          setPdfUrl(res.fileName);
+        }
+      } catch (error) {
+        console.log(error);
+      }
+    };
+    calendar_pdf();
+  }, []);
+
+  const handleSubmitpdf = async () => {
+    try {
+      const formDataToSend = new FormData();
+      if (event.calendar) {
+        formDataToSend.append("file", event.calendar);
+      }
+      const res = await upload_pdf(formDataToSend);
+      if (res) {
+        all_event();
+        setisNewEventPdf(false);
+        setregistrationSuccess(true);
+        setEvent({
+          calendar: null,
+        });
+        setTimeout(() => {
+          setregistrationSuccess(false);
+        }, 4000);
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  };
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
       if (
@@ -163,6 +210,7 @@ const Calendar = () => {
         !tooltipRef.current?.contains(event.target)
       ) {
         setisNewEvent(false);
+        setisNewEventPdf(false);
         document.body.style.overflow = "auto";
       }
     };
@@ -212,7 +260,7 @@ const Calendar = () => {
         <div className="w-full flex justify-end gap-3 items-end">
           <button
             className="bg-[#e98256] mb-4 flex justify-between items-center gap-2 text-[#fff] px-2 py-2 rounded-lg"
-            onClick={() => setisNewEvent(!isNewEvent)}
+            onClick={() => setisNewEventPdf(!isNewEventPdf)}
           >
             <Plus className={"bg-transparent w-[20px] h-[20px]"} />
             <p className="text-[12px] bg-transparent hidden sm:block font-bold font-DMSans">
@@ -331,6 +379,115 @@ const Calendar = () => {
           </motion.div>
         </AnimatePresence>
       )}
+      {isNewEventPdf && (
+        <AnimatePresence>
+          <motion.div
+            initial={{ opacity: 0, y: -20 }}
+            animate={{
+              opacity: isNewEventPdf ? 1 : 0,
+              y: isNewEventPdf ? 0 : -20,
+            }}
+            exit={{ opacity: 0, y: 20 }}
+            transition={{ duration: 0.3 }}
+            className="fixed bottom-0 left-0 right-0 top-0 z-[9999] flex h-full bg-transparent backdrop-blur-[10px] min-h-screen w-full items-center justify-center overflow-y-auto"
+          >
+            <div
+              ref={tooltipRef as React.RefObject<HTMLDivElement>}
+              className={
+                "mb-32 h-auto py-4 max-h-[540px] w-[26%] overflow-y-auto rounded-[20px] bg-[#fff] px-4 shadow-md [@media(max-width:1200px)]:w-[50%] [@media(max-width:700px)]:w-[90%]"
+              }
+            >
+              <div className="flex w-full flex-col items-center bg-[#fff] justify-center">
+                <h2 className="font-bold text-center w-full bg-white text-[20px] font-DMSans mt-4">
+                  Calendar PDF Upload
+                </h2>
+                <div className="flex flex-col items-left bg-[#fff] justify-center pt-2 w-full lg:w-[336px]">
+                  {selectedFile === null && (
+                    <>
+                      <p className="bg-inherit text-[13px] text-[#80BD25] font-semibold">
+                        Select a pdf file that will be downloaded.
+                      </p>
+                      <span className="bg-inherit text-[10px] text-[#434d33] italic mb-4 font-semibold">
+                        Save file with Calendar.pdf before uploading..
+                      </span>
+                    </>
+                  )}
+                  <div className="h-full w-full m-auto flex justify-center items-center bg-white rounded-md">
+                    {selectedFile ? (
+                      <div className="bg-white w-full">
+                        <button
+                          className="mb-3 rounded-lg bg-[#80BD25] p-2 text-center text-[14px] text-[#fff] font-semibold"
+                          onClick={removeFile}
+                        >
+                          Change file
+                        </button>
+                        <motion.p
+                          initial={{ scale: 0 }}
+                          animate={{ scale: 1 }}
+                          transition={{ duration: 1.5 }}
+                          exit={{ scale: 0 }}
+                          className="bg-white font-bold text-left w-full text-[20px] font-DMSans my-4"
+                        >
+                          {selectedFile.name}
+                        </motion.p>
+                        {/* <motion.p
+                          initial={{ scale: 0 }}
+                          animate={{ scale: 1 }}
+                          transition={{ duration: 1.5 }}
+                          exit={{ scale: 0 }}
+                          src={selectedFile}
+                          alt="Selected"
+                          className=" h-[180px] w-[180px] rounded-[10px] border-[1px] border-themeGrey/20"
+                        /> */}
+                      </div>
+                    ) : (
+                      <motion.div
+                        initial={{ scale: 0 }}
+                        animate={{ scale: 1 }}
+                        transition={{ duration: 1.5 }}
+                        exit={{ scale: 0 }}
+                      >
+                        <label className="inline-block">
+                          <input
+                            type="file"
+                            name="calendar"
+                            onChange={handlePictureChange}
+                            className="hidden"
+                            accept=".pdf"
+                          />
+                          <div className="inset-0 flex h-[60px] w-[20px] m-auto items-center  justify-center rounded-[10px] border-[1px] border-[#80BD25] lg:w-[180px]">
+                            <CalendarAdd fontSize={40} />
+                          </div>
+                        </label>
+                      </motion.div>
+                    )}
+                  </div>
+                </div>
+                <button
+                  className="bg-[#80BD25] h-[40px] lg:w-[336px] rounded-md font-semibold  w-full  text-[#fff] my-4"
+                  onClick={handleSubmitpdf}
+                >
+                  Upload
+                </button>
+              </div>
+            </div>
+          </motion.div>
+        </AnimatePresence>
+      )}
+      <div>
+        {pdfUrl ? (
+          <>
+            <FaFilePdf fontSize={50} color="red" />
+            <p className="font-bold text-left w-full text-[20px] font-DMSans my-4">
+              {pdfUrl}
+            </p>
+          </>
+        ) : (
+          <p className="font-bold text-left w-full text-[20px] font-DMSans my-4">
+            No file Uploaded
+          </p>
+        )}
+      </div>
       {registrationSuccess && (
         <AnimatePresence>
           <motion.div
