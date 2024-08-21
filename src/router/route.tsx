@@ -9,6 +9,7 @@ import NewBlog from "../pages/NewBlog";
 import News from "../pages/News";
 import UserProfile from "../pages/UserProfile";
 import Operators from "../pages/Operators";
+import Profile from "../pages/Profile";
 
 const router = createBrowserRouter([
   {
@@ -54,6 +55,10 @@ const router = createBrowserRouter([
       {
         path: "/operators",
         element: <Operators />,
+      },
+      {
+        path: "/profile",
+        element: <Profile />,
       },
     ],
   },

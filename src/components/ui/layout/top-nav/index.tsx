@@ -60,6 +60,14 @@ export const TopNav = ({ title }: TopNavProps) => {
       console.log(error);
     }
   };
+  const handleProfile = async () => {
+    try {
+      // await log_out(user.staffRec._id);
+      navigate("/profile");
+    } catch (error) {
+      console.log(error);
+    }
+  };
 
   return (
     <header className="flex bg-white h-[60px] px-10 w-full justify-between items-center max-md:items-center">
@@ -100,17 +108,20 @@ export const TopNav = ({ title }: TopNavProps) => {
             }
             ref={tooltipRef as React.RefObject<HTMLDivElement>}
           >
-            <div className="ronded-[3px] bg-white translate-[.3s] flex cursor-pointer items-center justify-start gap-3 px-4 py-3 text-base font-light hover:bg-main/10">
+            <button
+              className="ronded-[3px] bg-white translate-[.3s] flex cursor-pointer items-center justify-start gap-3 px-4 py-3 text-base font-light hover:bg-main/10"
+              onClick={handleProfile}
+            >
               <User className="text-xl bg-white" />
               <h3 className="bg-white">My Profile</h3>
-            </div>
-            <div
+            </button>
+            <button
               className="ronded-[3px] bg-white flex cursor-pointer items-center justify-start gap-3 px-4 py-2 text-base font-light text-[#F45B69]"
               onClick={handleLogout}
             >
               <LogoutOpen className="text-xl bg-white" />
               <h3 className="bg-white">Logout</h3>
-            </div>
+            </button>
           </motion.div>
         )}
       </div>

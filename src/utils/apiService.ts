@@ -197,6 +197,23 @@ export const edit_event = async (data: object, eventId: string) => {
   }
 };
 
+export const edit_Pass = async (data: object, userId: string) => {
+  try {
+    const response = await axios.put(
+      `${StringapiUrl}auth/change_password/${userId}`,
+      data,
+      {
+        headers: {
+          "x-api-key": `${StringapiKey}`,
+        },
+      }
+    );
+    return response.data;
+  } catch (error) {
+    throw error;
+  }
+};
+
 // get all staff
 export const all_staff = async () => {
   try {
