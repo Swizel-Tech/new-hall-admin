@@ -169,8 +169,6 @@ const Calendar = () => {
       try {
         const res = await get_pdf("Calendar.pdf");
         if (res.message === "File exists") {
-          console.log(res);
-
           setPdfUrl(res.fileName);
         }
       } catch (error) {
