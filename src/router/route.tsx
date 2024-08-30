@@ -10,6 +10,7 @@ import News from "../pages/News";
 import UserProfile from "../pages/UserProfile";
 import Operators from "../pages/Operators";
 import Profile from "../pages/Profile";
+import ApplicationTable from "../pages/ApplicationTable";
 
 const router = createBrowserRouter([
   {
@@ -59,6 +60,10 @@ const router = createBrowserRouter([
       {
         path: "/profile",
         element: <Profile />,
+      },
+      {
+        path: "/applications",
+        element: <ApplicationTable />,
       },
     ],
   },

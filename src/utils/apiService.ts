@@ -227,6 +227,19 @@ export const all_staff = async () => {
     throw error;
   }
 };
+// get all staff
+export const all_application = async () => {
+  try {
+    const response = await axios.get(`${StringapiUrl}staff/get_application`, {
+      headers: {
+        "x-api-key": `${StringapiKey}`,
+      },
+    });
+    return response.data;
+  } catch (error) {
+    throw error;
+  }
+};
 
 // get all User
 export const all_operators = async () => {

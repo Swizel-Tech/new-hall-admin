@@ -245,7 +245,7 @@ const Form = () => {
       {loading && (
         <div className="fixed right-0 top-0 z-[999] h-full w-full bg-transparent backdrop-blur-[10px] transition-[.5s]"></div>
       )}
-      <div className="p-2 lg:px-8 w-full">
+      <div className="w-full h-full bg-white">
         {showforgotPassword && (
           <button
             className="float-end px-4 py-2 text-[#fff] bg-[#80BD25] rounded-lg"
@@ -254,9 +254,9 @@ const Form = () => {
             Login
           </button>
         )}
-        <div className="flex flex-col lg:flex-row w-full justify-between items-end h-[90vh] bg-[#F6F6F6]">
+        <div className="flex flex-col lg:flex-row w-full justify-between items-center p-0 h-[100vh] bg-[#F6F6F6]">
           <div className="w-full lg:w-[60%] bg-inherit flex justify-center items-center flex-1 h-full">
-            <img src={login} alt="" className="w-[72%] rounded-lg" />
+            <img src={login} alt="" className="w-[70%] rounded-lg" />
           </div>
           {showforgotPassword ? (
             <>
@@ -404,7 +404,7 @@ const Form = () => {
               )}
             </>
           ) : (
-            <div className="bg-[#F6F6F6] w-full lg:w-[40%] rounded-lg flex justify-center items-start py-3 flex-col gap-y-2 px-4 shadow-2xl">
+            <div className="bg-[#F6F6F6] mr-6 w-full lg:w-[40%] rounded-lg flex justify-center items-start py-3 flex-col gap-y-2 px-4 shadow-2xl">
               <h2 className="bg-inherit text-left mb-8 font-bold font-DMSans text-[20px]">
                 Welcome 👋 Please Login here
               </h2>
