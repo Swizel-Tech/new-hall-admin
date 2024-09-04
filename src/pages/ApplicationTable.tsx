@@ -55,7 +55,6 @@ const shortenedHeaders = [
   "Declaration",
 ];
 
-// Define the structure of each row
 interface TableRow {
   [key: number]: string; // Each item in the row is a string indexed by its position
 }
