@@ -2,6 +2,7 @@ import { useEffect, useRef, useState } from "react";
 import { cn } from "../../utils/helpers";
 import { FaChevronLeft, FaChevronRight } from "react-icons/fa";
 import { Avatar } from "../ui/avatar";
+import { saveAs } from "file-saver";
 import {
   ArchiveDocument,
   Camera,
@@ -22,7 +23,12 @@ import "react-toastify/dist/ReactToastify.css";
 import { Warning } from "../ui/modals/Warning";
 import { useNavigate } from "react-router-dom";
 import { AnimatePresence, motion } from "framer-motion";
-import { get_staff, edit_staff, verify_otp } from "../../utils/apiService";
+import {
+  get_staff,
+  edit_staff,
+  verify_otp,
+  download_cv,
+} from "../../utils/apiService";
 import { success } from "../../assets";
 // import {  } from "react-huge-icons/outline";
 
@@ -170,6 +176,21 @@ export const BaseTable = ({
       ...formData,
       [name]: value,
     });
+  };
+
+  const downloadcv = async (file: string | boolean | undefined) => {
+    try {
+      if (typeof file === "string") {
+        const fileName = file.split("\\").pop();
+        console.log(fileName);
+        const blob = await download_cv(fileName);
+        saveAs(blob, fileName);
+      } else {
+        console.log("File is not a string:", file);
+      }
+    } catch (error) {
+      console.log(error);
+    }
   };
 
   const handleverificationChange = (e: {
@@ -336,6 +357,21 @@ export const BaseTable = ({
             Verify
           </button>
         );
+      } else if (row.cv === true && row.file) {
+        return (
+          <button
+            className="bg-[#fff] text-[#F3685B] flex justify-center text-[12px] items-center w-[90px] rounded-[4px] py-1"
+            onClick={() => downloadcv(row.file)}
+          >
+            Download CV
+          </button>
+        );
+      } else if (row.cv === false && !row.file) {
+        return (
+          <p className="bg-[#fff] text-[#F3685B] flex justify-center text-[12px] items-center w-[90px] rounded-[4px] py-1">
+            No CV Uploaded
+          </p>
+        );
       } else if (row.action === true && row.userId) {
         return (
           <div className="flex bg-white flex-row items-center gap-3">
@@ -390,7 +426,7 @@ export const BaseTable = ({
               {headers.map((headr: string, idx: number) => (
                 <th
                   key={idx}
-                  className="bg-[#fcfdfd] text-[12px] w-[13%] text-[#435060] font-bold font-DMSans"
+                  className="bg-[#fcfdfd] text-[12px] text-center w-[13%] text-[#435060] font-bold font-DMSans"
                 >
                   <p className="bg-[#fcfdfd] w-full text-[12px] font-DMSans font-bold text-[#435060]">
                     {headr}

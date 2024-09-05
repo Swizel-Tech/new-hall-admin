@@ -227,6 +227,37 @@ export const all_staff = async () => {
     throw error;
   }
 };
+// All application
+export const applications = async () => {
+  try {
+    const response = await axios.get(`${StringapiUrl}staff/get_applications`, {
+      headers: {
+        "x-api-key": `${StringapiKey}`,
+      },
+    });
+    return response.data;
+  } catch (error) {
+    throw error;
+  }
+};
+
+export const download_cv = async (fileName: string | undefined) => {
+  try {
+    const response = await axios.get(
+      `${StringapiUrl}event/download_calendar/${fileName}`,
+      {
+        headers: {
+          "x-api-key": `${StringapiKey}`,
+        },
+        responseType: "blob",
+      }
+    );
+    return response.data;
+  } catch (error) {
+    throw error;
+  }
+};
+
 // get all staff
 export const all_application = async () => {
   try {
@@ -235,6 +266,24 @@ export const all_application = async () => {
         "x-api-key": `${StringapiKey}`,
       },
     });
+    return response.data;
+  } catch (error) {
+    throw error;
+  }
+};
+
+export const single_application = async (
+  applicationId: string | undefined | boolean
+) => {
+  try {
+    const response = await axios.get(
+      `${StringapiUrl}staff/get_single_application/${applicationId}`,
+      {
+        headers: {
+          "x-api-key": `${StringapiKey}`,
+        },
+      }
+    );
     return response.data;
   } catch (error) {
     throw error;
@@ -309,6 +358,24 @@ export const delete_staff = async (staffId: string | boolean | undefined) => {
   try {
     const response = await axios.delete(
       `${StringapiUrl}staff/delete_staff/${staffId}`,
+      {
+        headers: {
+          "x-api-key": `${StringapiKey}`,
+        },
+      }
+    );
+    return response.data;
+  } catch (error) {
+    throw error;
+  }
+};
+
+export const delete_application = async (
+  applicationId: string | boolean | undefined
+) => {
+  try {
+    const response = await axios.delete(
+      `${StringapiUrl}staff/delete_application/${applicationId}`,
       {
         headers: {
           "x-api-key": `${StringapiKey}`,

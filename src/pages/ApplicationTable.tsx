@@ -1,16 +1,17 @@
 import { useEffect, useState } from "react";
-import { all_application } from "../utils/apiService";
+import { applications } from "../utils/apiService";
 import { DashboardArea } from "../components/ui/layout/dashboard/DashboardArea";
 import { DashboardCardRow } from "../components/grouped-components/dashboard-card-row";
 import { DashboardCardProps } from "../components/ui/dashboard-card";
 import { UserAdd } from "react-huge-icons/outline";
 import { useUser } from "../context/user-provider";
+import { ApplicationTable } from "../components/table/ApplicationTable";
+// import { format } from "date-fns";
 
 const shortenedHeaders = [
-  "Timestamp",
-  "Position",
+  "First Name",
   "Last Name",
-  "Name",
+  "Position",
   "Gender",
   "DOB",
   "Marital Status",
@@ -20,20 +21,20 @@ const shortenedHeaders = [
   "Email",
   "Qualification",
   "School Attended",
-  "Duration of Study",
-  "Course of study",
+  "Duration Of Study",
+  "Course Of Study",
   "Degree",
   "Previous Work Place",
   "Position Held",
   "Date Appointed",
   "End Date",
-  "Reason for Leaving",
+  "Reason For Leaving",
   "Monthly Salary",
   "Primary Subject",
   "Secondary Subject",
   "Greatest Achievement",
   "Teaching Reason",
-  "Why New Hall?",
+  "Why New Hall",
   "Referee 1 Name",
   "Referee 1 Position",
   "Referee 1 Phone",
@@ -44,7 +45,7 @@ const shortenedHeaders = [
   "Referee 2 Phone",
   "Referee 2 Email",
   "Referee 2 Relation",
-  "Upload your cv",
+  "CV",
   "Staff Relation",
   "Relation Details",
   "Conviction",
@@ -53,16 +54,71 @@ const shortenedHeaders = [
   "Registered Body",
   "Specify Body",
   "Declaration",
+  "Action",
 ];
 
-interface TableRow {
-  [key: number]: string; // Each item in the row is a string indexed by its position
+interface IBaseTable {
+  showPagination?: boolean;
+  headers: string[];
+  headersClassName?: string;
+  tableRows: (string | Record<string, string | boolean | undefined>)[][];
 }
 
 const DataTable = () => {
-  const [tableData, setTableData] = useState<TableRow[]>([]);
+  const [transactionsMockTableRows, setTransactionsMockTableRows] = useState([
+    [
+      { hasAvatar: false, statusText: "", img: "", name: "" },
+      "",
+      "",
+      "",
+      "",
+      "",
+      "",
+      "",
+      "",
+      "",
+      "",
+      "",
+      "",
+      "",
+      "",
+      "",
+      "",
+      "",
+      "",
+      "",
+      "",
+      "",
+      "",
+      "",
+      "",
+      "",
+      "",
+      "",
+      "",
+      "",
+      "",
+      "",
+      "",
+      "",
+      "",
+      "",
+      "",
+      { cv: true, file: "" },
+      "",
+      "",
+      "",
+      "",
+      "",
+      "",
+      "",
+      { action: true, userId: "" },
+    ],
+  ]);
   const { user } = useUser();
   const [staffName, setStaffName] = useState("");
+  const [filteredTableRows] = useState<IBaseTable["tableRows"]>([]);
+  const [searchQuery] = useState("");
   const [dashboardHeroCards, setDashboardHeroCards] = useState<
     DashboardCardProps[]
   >([
@@ -87,16 +143,82 @@ const DataTable = () => {
 
   const getapplication = async () => {
     try {
-      const res = await all_application();
-      console.log(res);
+      const res = await applications();
+      const findUserArray = res.data;
+      const totalCount = res.totalCount;
+      console.log(findUserArray);
 
-      setTableData(res.data);
-      const totalCount = res.totalRows;
-      setDashboardHeroCards((prevCards) =>
-        prevCards.map((card) =>
-          card.title === "Application" ? { ...card, value: totalCount } : card
-        )
-      );
+      if (Array.isArray(findUserArray)) {
+        const newRows = findUserArray.map((user) => [
+          {
+            hasAvatar: false,
+            statusText: "",
+            img: "",
+            name: user.name,
+            userId: user._id,
+          },
+          user.lastName,
+          user.position,
+          user.gender,
+          user.dob,
+          user.maritalStatus,
+          user.address,
+          user.primaryMobile,
+          user.secondaryMobile,
+          user.email,
+          user.qualification,
+          user.schoolAttended,
+          user.durationOfStudy,
+          user.courseOfStudy,
+          user.degree,
+          user.previousWorkPlace,
+          user.positionHeld,
+          user.dateAppointed,
+          user.endDate,
+          user.reasonForLeaving,
+          user.monthlySalary,
+          user.primarySubject,
+          user.secondarySubject,
+          user.greatestAchievement,
+          user.teachingReason,
+          user.whyNewHall,
+          user.referee1Name,
+          user.referee1Position,
+          user.referee1Phone,
+          user.referee1Email,
+          user.referee1Relation,
+          user.referee2Name,
+          user.referee2Position,
+          user.referee2Phone,
+          user.referee2Email,
+          user.referee2Relation,
+          {
+            cv: true,
+            file: user.cv,
+          },
+          user.staffRelation,
+          user.relationDetails,
+          user.conviction,
+          user.disqualification,
+          user.details,
+          user.registeredBody,
+          user.specifyBody,
+          user.declaration,
+          {
+            action: true,
+            userId: user._id,
+          },
+        ]);
+
+        setTransactionsMockTableRows(newRows);
+        setDashboardHeroCards((prevCards) =>
+          prevCards.map((card) =>
+            card.title === "Application" ? { ...card, value: totalCount } : card
+          )
+        );
+      } else {
+        console.error("Invalid data format:", res.data);
+      }
     } catch (error) {
       console.log(error);
     }
@@ -114,7 +236,7 @@ const DataTable = () => {
         </div>
         <div className="overflow-x-auto mt-[6%]">
           <div className="w-auto bg-white overflow-x-auto rounded-[8px]">
-            <table className="table bg-white w-full">
+            {/* <table className="table bg-white w-full">
               <thead className="bg-white">
                 <tr className="text-md border-b bg-[#fcfdfd] font-semibold">
                   {shortenedHeaders.map((headr: string, idx: number) => (
@@ -130,7 +252,7 @@ const DataTable = () => {
                 </tr>
               </thead>
               <tbody className="bg-white">
-                {tableData.slice(1).map((row: TableRow, idx: number) => (
+                {tableData.map((row: TableRow, idx: number) => (
                   <tr
                     key={idx}
                     className="border-b rounded-md mb-3 bg-white border-b-themeGrey/20"
@@ -146,7 +268,14 @@ const DataTable = () => {
                   </tr>
                 ))}
               </tbody>
-            </table>
+            </table> */}
+            <ApplicationTable
+              tableRows={
+                searchQuery ? filteredTableRows : transactionsMockTableRows
+              }
+              headers={shortenedHeaders}
+              showPagination={true}
+            />
           </div>
         </div>
       </div>
