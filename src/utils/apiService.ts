@@ -271,6 +271,18 @@ export const all_application = async () => {
     throw error;
   }
 };
+export const all_non_teaching = async () => {
+  try {
+    const response = await axios.get(`${StringapiUrl}staff/get_non_teaching`, {
+      headers: {
+        "x-api-key": `${StringapiKey}`,
+      },
+    });
+    return response.data;
+  } catch (error) {
+    throw error;
+  }
+};
 
 export const single_application = async (
   applicationId: string | undefined | boolean

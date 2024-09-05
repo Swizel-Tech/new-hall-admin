@@ -11,6 +11,7 @@ import UserProfile from "../pages/UserProfile";
 import Operators from "../pages/Operators";
 import Profile from "../pages/Profile";
 import ApplicationTable from "../pages/ApplicationTable";
+import NonTeaching from "../pages/NonTeaching";
 
 const router = createBrowserRouter([
   {
@@ -64,6 +65,10 @@ const router = createBrowserRouter([
       {
         path: "/applications",
         element: <ApplicationTable />,
+      },
+      {
+        path: "/nonapplications",
+        element: <NonTeaching />,
       },
     ],
   },
