@@ -5,7 +5,7 @@ import { DashboardCardRow } from "../components/grouped-components/dashboard-car
 import { DashboardCardProps } from "../components/ui/dashboard-card";
 import { UserAdd } from "react-huge-icons/outline";
 import { useUser } from "../context/user-provider";
-import { ApplicationTable } from "../components/table/ApplicationTable";
+import { NonTeachingTable } from "../components/table/NonTeachingTable";
 // import { format } from "date-fns";
 
 const shortenedHeaders = [
@@ -217,7 +217,7 @@ const DataTable = () => {
         </div>
         <div className="overflow-x-auto mt-[6%]">
           <div className="w-auto bg-white overflow-x-auto rounded-[8px]">
-            <ApplicationTable
+            <NonTeachingTable
               tableRows={
                 searchQuery ? filteredTableRows : transactionsMockTableRows
               }

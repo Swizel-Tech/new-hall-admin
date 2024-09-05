@@ -7,7 +7,7 @@ import "react-toastify/dist/ReactToastify.css";
 import { download_cv } from "../../utils/apiService";
 import { AnimatePresence, motion } from "framer-motion";
 import { GrClose } from "react-icons/gr";
-import ApplicationForm from "../data/Applications";
+import NonTeachingApplication from "../data/NonTeachingApplication";
 import { ApplicationDeleteWarn } from "../ui/modals/ApplicationDeleteWarn";
 
 interface IBaseTable {
@@ -17,7 +17,7 @@ interface IBaseTable {
   tableRows: (string | Record<string, string | boolean | undefined>)[][];
 }
 
-export const ApplicationTable = ({
+export const NonTeachingTable = ({
   // showPagination = false,
   headers,
   headersClassName,
@@ -232,9 +232,9 @@ export const ApplicationTable = ({
                 </button>
               </div>
               <h2 className="font-OpenSans mb-6 bg-white text-[#1EB3FE] text-center text-[26px] font-normal leading-[44px]">
-                Application for Teaching Position
+                Application for Non Teaching Position
               </h2>
-              <ApplicationForm
+              <NonTeachingApplication
                 application_id={isApplication_id}
                 onClose={() => setIsteaching(false)}
               />

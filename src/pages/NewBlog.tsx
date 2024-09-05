@@ -153,7 +153,7 @@ const NewBlog = () => {
           {blog.images.map((image, index) => (
             <img
               key={index}
-              src={`https://new-hall-server.onrender.com/${image}`}
+              src={`http://localhost:3001/${image}`}
               alt={`Blog Image`}
               className="rounded-lg w-[200px] h-[200px]"
             />

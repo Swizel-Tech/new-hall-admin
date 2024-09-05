@@ -90,15 +90,15 @@ const Calendar = () => {
       const totalCount = res.totalCount;
       if (Array.isArray(findUserArray)) {
         const newRows = findUserArray.map((user) => {
-          const maxLength = 15;
-          const truncatedDescription =
-            user.description.length > maxLength
-              ? user.description.substring(0, maxLength) + "..."
-              : user.description;
-          const truncatedLocation =
-            user.location.length > maxLength
-              ? user.location.substring(0, maxLength) + "..."
-              : user.location;
+          // const maxLength = 15;
+          // const truncatedDescription =
+          //   user.description.length > maxLength
+          //     ? user.description.substring(0, maxLength) + "..."
+          //     : user.description;
+          // const truncatedLocation =
+          //   user.location.length > maxLength
+          //     ? user.location.substring(0, maxLength) + "..."
+          //     : user.location;
 
           return [
             {
@@ -109,12 +109,12 @@ const Calendar = () => {
               userId: user._id,
             },
             `${user.createdBy.firstName} ${user.createdBy.lastName}`,
-            truncatedDescription,
+            `${user.description}`,
             format(new Date(user.startDate), "MMM do, yyyy"),
             format(new Date(user.endDate), "MMM do, yyyy"),
             user.startTime,
             user.endTime,
-            truncatedLocation,
+            `${user.location}`,
             format(new Date(user.createdAt), "MMM do, yyyy, h:mm:ss a"),
             {
               action: true,

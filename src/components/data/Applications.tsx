@@ -2,12 +2,12 @@ import { useEffect, useState } from "react";
 import { FilePdf } from "react-huge-icons/outline";
 import { single_application } from "../../utils/apiService";
 interface ApplicationFormProps {
-  // onClose: () => void;
+  onClose: () => void;
   application_id: string | undefined | boolean;
 }
 
 const ApplicationForm: React.FC<ApplicationFormProps> = ({
-  // onClose,
+  onClose,
   application_id,
 }) => {
   const [cvName, setCvName] = useState<string | null>(null);
@@ -78,8 +78,12 @@ const ApplicationForm: React.FC<ApplicationFormProps> = ({
     get_application();
   }, [application_id]);
 
+  const handleClose = () => {
+    onClose();
+  };
+
   return (
-    <div className="flex bg-white w-full  px-4 py-6 m-auto flex-col justify-between items-center">
+    <div className="flex bg-white w-full px-4 py-6 m-auto flex-col justify-between items-center">
       {/* Basic Information */}
       <div className="flex bg-white flex-col w-full justify-between items-start gap-4">
         <div className="flex bg-white flex-col w-full items-start justify-center gap-2">
@@ -575,6 +579,12 @@ const ApplicationForm: React.FC<ApplicationFormProps> = ({
           />
         </div>
       </div>
+      <button
+        onClick={handleClose}
+        className={`w-full py-2 font-semibold font-OpenSans bg-[#1EB3FE] text-[#fff]`}
+      >
+        Close
+      </button>
     </div>
   );
 };

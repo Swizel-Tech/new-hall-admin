@@ -134,7 +134,7 @@ const News = () => {
                   <div className="bg-white w-[25%] rounded-lg">
                     {blog.images.length > 0 && (
                       <img
-                        src={`https://new-hall-server.onrender.com/${blog.images[0].replace(
+                        src={`http://localhost:3001/${blog.images[0].replace(
                           /\\/g,
                           "/"
                         )}`}
@@ -150,7 +150,7 @@ const News = () => {
                     <div className="bg-white">
                       <div
                         dangerouslySetInnerHTML={{ __html: blog.content }}
-                        className="overflow-x-hidden px-2 rounded-lg overflow-y-hidden h-[110px] text-[#000] text-left font-normal font-DMSans text-[14px]"
+                        className="overflow-x-hidden px-2 rounded-lg overflow-y-hidden h-[110px] bg-white text-[#000] text-left font-normal font-DMSans text-[14px]"
                       ></div>
                     </div>
                     <p className="bg-white mt-2 overflow-x-hidden overflow-y-hidden text-[#000] text-left font-normal font-DMSans text-[12px]">

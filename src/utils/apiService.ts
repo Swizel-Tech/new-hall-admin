@@ -302,6 +302,24 @@ export const single_application = async (
   }
 };
 
+export const single_non_application = async (
+  applicationId: string | undefined | boolean
+) => {
+  try {
+    const response = await axios.get(
+      `${StringapiUrl}staff/get_single_non_teaching/${applicationId}`,
+      {
+        headers: {
+          "x-api-key": `${StringapiKey}`,
+        },
+      }
+    );
+    return response.data;
+  } catch (error) {
+    throw error;
+  }
+};
+
 // get all User
 export const all_operators = async () => {
   try {

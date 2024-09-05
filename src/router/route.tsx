@@ -12,6 +12,7 @@ import Operators from "../pages/Operators";
 import Profile from "../pages/Profile";
 import ApplicationTable from "../pages/ApplicationTable";
 import NonTeaching from "../pages/NonTeaching";
+import Blog from "../pages/Blog";
 
 const router = createBrowserRouter([
   {
@@ -44,7 +45,7 @@ const router = createBrowserRouter([
       },
       {
         path: "/news/new_blog/:blogId",
-        element: <NewBlog />,
+        element: <Blog />,
       },
       {
         path: "news",
