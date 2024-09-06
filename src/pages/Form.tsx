@@ -37,6 +37,7 @@ const Form = () => {
   const [showConfirmpassword, setshowConfirmpassword] = useState(false);
   const [showCreatepass, setshowCreatepass] = useState(false);
   const [isOptsent, setOptsent] = useState(false);
+  const [isSendOtp, setisSendOtp] = useState(false);
   const [loginsuccess, setLoginSuccess] = useState(false);
   const [showforgotPassword, setshowForgotpass] = useState(false);
   const [rememberMe, setRememberMe] = useState(false);
@@ -119,12 +120,14 @@ const Form = () => {
 
   const handleOtpsent = async () => {
     try {
+      setisSendOtp(true);
       const data = {
         email: forgotemail.email,
       };
       const otp_record = await forgot_pass(data);
       if (otp_record) {
         setOptsent(true);
+        setisSendOtp(false);
       }
     } catch (error) {
       console.log(error);
@@ -245,15 +248,7 @@ const Form = () => {
       {loading && (
         <div className="fixed right-0 top-0 z-[999] h-full w-full bg-transparent backdrop-blur-[10px] transition-[.5s]"></div>
       )}
-      <div className="w-full h-full bg-white">
-        {showforgotPassword && (
-          <button
-            className="float-end px-4 py-2 text-[#fff] bg-[#80BD25] rounded-lg"
-            onClick={handleLogin}
-          >
-            Login
-          </button>
-        )}
+      <div className="w-full h-full bg-[#F6F6F6] px-4">
         <div className="flex flex-col lg:flex-row w-full justify-between items-center p-0 h-[100vh] bg-[#F6F6F6]">
           <div className="w-full lg:w-[60%] bg-inherit flex justify-center items-center flex-1 h-full">
             <img src={login} alt="" className="w-[70%] rounded-lg" />
@@ -320,6 +315,15 @@ const Form = () => {
                       {passwordError && (
                         <p className="my-1 text-red-500">{passwordError}</p>
                       )}
+                      <span>
+                        remember Password?
+                        <button
+                          className="text-[#80BD25]"
+                          onClick={handleLogin}
+                        >
+                          Login
+                        </button>
+                      </span>
                       {newPassword.password !== newPassword.Confirmpassword ? (
                         <button className="w-full mt-8 bg-[#eae9e9] text-[16px] rounded-lg font-semibold text-[#000] h-[50px] disabled cursor-not-allowed">
                           Submit
@@ -353,6 +357,15 @@ const Form = () => {
                           // focusStyle={focusStyle}
                         />
                       </div>
+                      <span>
+                        remember Password?
+                        <button
+                          className="text-[#80BD25]"
+                          onClick={handleLogin}
+                        >
+                          Login
+                        </button>
+                      </span>
                       {forgotemail.email === "" ? (
                         <button className="w-full mt-8 bg-[#eae9e9] text-[16px] rounded-lg font-semibold text-[#000] h-[50px] disabled cursor-not-allowed">
                           verify OTP
@@ -388,6 +401,14 @@ const Form = () => {
                       className="bg-[#f6f6f6]  px-3 rounded-lg h-full w-full outline-none"
                     />
                   </div>
+
+                  <span>
+                    {" "}
+                    remember Password?{" "}
+                    <button className="text-[#80BD25]" onClick={handleLogin}>
+                      Login
+                    </button>
+                  </span>
                   {forgotemail.email === "" ? (
                     <button className="w-full mt-8 bg-[#eae9e9] text-[16px] rounded-lg font-semibold text-[#000] h-[50px] disabled cursor-not-allowed">
                       Send OTP
@@ -397,7 +418,11 @@ const Form = () => {
                       onClick={handleOtpsent}
                       className="w-full mt-8 bg-[#80BD25] text-[16px] rounded-lg font-semibold text-[#fff] h-[50px]"
                     >
-                      Send OTP
+                      {isSendOtp === true ? (
+                        <p className="bg-inherit">Sending...</p>
+                      ) : (
+                        <p className="bg-inherit"> Send OTP</p>
+                      )}
                     </button>
                   )}
                 </div>
