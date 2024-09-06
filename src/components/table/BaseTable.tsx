@@ -182,7 +182,6 @@ export const BaseTable = ({
     try {
       if (typeof file === "string") {
         const fileName = file.split("\\").pop();
-        console.log(fileName);
         const blob = await download_cv(fileName);
         saveAs(blob, fileName);
       } else {
