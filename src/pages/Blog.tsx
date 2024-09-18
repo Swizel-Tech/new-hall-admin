@@ -1,7 +1,6 @@
 import { useEffect, useState } from "react";
 import { DashboardArea } from "../components/ui/layout/dashboard/DashboardArea";
 import { useUser } from "../context/user-provider";
-import ReactQuill from "react-quill";
 import "react-quill/dist/quill.snow.css";
 import { get_a_blog } from "../utils/apiService";
 import { motion } from "framer-motion";
@@ -51,7 +50,8 @@ const Blog = () => {
     get_News();
   }, [blogId]);
 
-  const handleContentChange = (value: string) => {
+  const handleContentChange = (e: { target: { value: any } }) => {
+    const { value } = e.target;
     setBlog((prevBlog) => ({
       ...prevBlog,
       content: value,
@@ -77,7 +77,7 @@ const Blog = () => {
           onClick={handleNewNews}
         >
           <motion.div
-            whileHover={{ x: -5 }} // Move the arrow left by 5px on hover
+            whileHover={{ x: -5 }}
             transition={{ type: "spring", stiffness: 300 }}
             className="bg-transparent w-[30px] h-[30px]"
           >
@@ -99,7 +99,7 @@ const Blog = () => {
           {blog.images.map((image, index) => (
             <img
               key={index}
-              src={`http://localhost:3001/${image}`}
+              src={image}
               alt={`Blog Image`}
               className="rounded-lg w-[200px] h-[200px]"
             />
@@ -111,7 +111,6 @@ const Blog = () => {
               Title
             </p>
             <div className="h-[40px] flex justify-between items-center w-full border-[1px] border-[#ddd] bg-slate-400 rounded-md">
-              {/* <UserCircleBlock className="bg-inherit h-[30px] w-[30px] text-[#ddd]" /> */}
               <input
                 type="text"
                 className="w-full focus:outline-none h-full px-2"
@@ -149,11 +148,11 @@ const Blog = () => {
               Content
             </p>
             <div className=" rounded-md">
-              <ReactQuill
+              <textarea
                 value={blog.content}
                 onChange={handleContentChange}
-                readOnly
-                className="w-full"
+                className="w-full h-32 p-2 border border-gray-300 rounded-md focus:outline-none focus:border-[#80BD25]"
+                placeholder="Enter your content here..."
               />
             </div>
           </div>

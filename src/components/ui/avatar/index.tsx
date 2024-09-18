@@ -24,10 +24,6 @@ export const Avatar = (props: AvatarProps) => {
     rounded,
   } = props;
 
-  const imagePath = img?.replace(/\\/g, "/");
-
-  const imageUrl = `${import.meta.env.VITE_API_BASE_URL}/${imagePath}`;
-
   const cnFn = (...inputs: ClassArray) =>
     cn(
       "h-10 w-10 rounded-md",
@@ -40,7 +36,7 @@ export const Avatar = (props: AvatarProps) => {
     <div className={cn("flex bg-white items-center gap-2", wrapperClassName)}>
       {img ? (
         <img
-          src={imageUrl}
+          src={img}
           className={cnFn("")}
           alt={name}
           onError={(e) => {

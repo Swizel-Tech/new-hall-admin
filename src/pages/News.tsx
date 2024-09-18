@@ -44,6 +44,7 @@ const News = () => {
   const get_all_blogs = async () => {
     try {
       const blogs = await get_blogs();
+      console.log(blogs);
       setBlogs(blogs.data);
     } catch (error) {
       console.log(error);
@@ -134,10 +135,7 @@ const News = () => {
                   <div className="bg-white w-[25%] rounded-lg">
                     {blog.images.length > 0 && (
                       <img
-                        src={`http://localhost:3001/${blog.images[0].replace(
-                          /\\/g,
-                          "/"
-                        )}`}
+                        src={blog.images[0]}
                         alt={`Blog Image`}
                         className="rounded-lg"
                       />
