@@ -11,7 +11,7 @@ import {
   Mobile,
   ArchiveDocument,
 } from "react-huge-icons/solid";
-import { Camera } from "react-huge-icons/outline";
+// import { Camera } from "react-huge-icons/outline";
 import { DashboardCardRow } from "../components/grouped-components/dashboard-card-row";
 import { DashboardCardProps } from "../components/ui/dashboard-card";
 import { AnimatePresence, motion } from "framer-motion";
@@ -41,7 +41,7 @@ interface IBaseTable {
 }
 
 const Operators = () => {
-  const [selectedFile, setSelectedFile] = useState<File | null>(null);
+  // const [selectedFile, setSelectedFile] = useState<File | null>(null);
   const tooltipRef = useRef<HTMLElement>(null);
   const { user } = useUser();
   const [filteredTableRows] = useState<IBaseTable["tableRows"]>([]);
@@ -223,16 +223,16 @@ const Operators = () => {
     };
   }, [isNewstaff]);
 
-  const handlePictureChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files?.[0];
-    if (file) {
-      setFormData({ ...formData, picture: file });
-      setSelectedFile(() => file);
-    }
-  };
-  const removeFile = () => {
-    setSelectedFile(null);
-  };
+  // const handlePictureChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  //   const file = e.target.files?.[0];
+  //   if (file) {
+  //     setFormData({ ...formData, picture: file });
+  //     setSelectedFile(() => file);
+  //   }
+  // };
+  // const removeFile = () => {
+  //   setSelectedFile(null);
+  // };
 
   const fadeInVariants = {
     hidden: { opacity: 0 },
@@ -289,8 +289,7 @@ const Operators = () => {
                 <h2 className="font-bold text-left w-full bg-white text-[20px] font-DMSans mt-4">
                   New User
                 </h2>
-                <div className="bg-white">
-                  {/* <input type="file" name="picture" onChange={handlePictureChange} /> */}
+                {/* <div className="bg-white">
                   {selectedFile ? (
                     <div className="bg-white">
                       <button
@@ -330,7 +329,7 @@ const Operators = () => {
                       </label>
                     </motion.div>
                   )}
-                </div>
+                </div> */}
                 <div className="flex flex-col items-left bg-[#fff] justify-center pt-2 lg:w-[336px]  w-full ">
                   <p className="bg-inherit text-[13px] text-[#80BD25] mb-1 font-semibold">
                     ID No.
